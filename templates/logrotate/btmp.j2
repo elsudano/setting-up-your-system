@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+
+/var/log/btmp {
+    missingok
+    monthly
+    create 0660 root utmp
+    rotate 1
+}
+

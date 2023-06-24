@@ -1,0 +1,68 @@
+# {{ ansible_managed }}
+
+# functions for keepass in console
+function lskp {
+  usage() {
+    echo
+    echo " Usage: lskp"
+    echo " Description: With this command we can see the list of the passwords that we have in the Password Manager"
+    echo " command: lskp <path of database> <group>"
+    echo " example: lskp keepass.kdbx /google"
+    echo
+    return 1
+  }
+  run() {
+    keepassxc-cli ls --no-password --key-file ~/.ssh/id_rsa $1 $2
+  }
+  if [ "$1" != "" ] && [ "$2" != "" ]; then
+    run $1 $2
+    return 1
+  else
+    usage
+    return 0
+  fi
+}
+
+function showkp {
+  usage() {
+    echo
+    echo " Usage: showkp"
+    echo " Description: With this command we can see all the propierties that we have in a item of the Password Manager"
+    echo " command: showkp <path of database> <group>/<item>"
+    echo " example: showkp keepass.kdbx '/google/my email'"
+    echo
+    return 1
+  }
+  run() {
+    keepassxc-cli show --no-password --key-file ~/.ssh/id_rsa $1
+  }
+  if [ "$1" != "" ]; then
+    run $1 $2
+    return 1
+  else
+    usage
+    return 0
+  fi
+}
+
+function getkp {
+  usage() {
+    echo
+    echo " Usage: getkp"
+    echo " Description: With this command we can see the password of item that we have in Password Manager"
+    echo " command: getkp <path of database> <group>/<item>"
+    echo " example: getkp keepass.kdbx '/google/my email'"
+    echo
+    return 1
+  }
+  run() {
+    keepassxc-cli show --show-protected --no-password --key-file ~/.ssh/id_rsa --attributes Password $1 $2
+  }
+  if [ "$1" != "" ] && [ "$2" != "" ]; then
+    run $1 $2
+    return 1
+  else
+    usage
+    return 0
+  fi
+}

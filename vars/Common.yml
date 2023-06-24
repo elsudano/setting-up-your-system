@@ -1,0 +1,80 @@
+---
+# We will run the roles in all these distributions
+# @required
+distributions:
+  - Debian
+  - RedHat
+  - Almalinux
+
+# In order to configure our NTP protocol we can choose which Time Zone we want
+# By Default: Europe/Madrid
+ntp_timezone: Europe/Madrid
+
+# This variable configure the value of the locale value in the system
+# also is needed for the check if in the system.
+# @required
+config_system_locale: es_ES.UTF-8
+
+# This variable configure the value of the language value in the system
+# also is needed for the check if in the system.
+# @required
+config_system_language: es_ES.UTF-8
+
+
+# We can change the name of our Workstation
+# By Default: workstation
+name_of_workstation: workstation
+
+# Default user thah we will created in the system
+# @required
+default_user: usuario
+
+# Default group thah we will created in the system
+# @required
+default_group: usuario
+
+# You can choose which is the value for your Swapiness
+# By Default is false
+workstation_swapiness: false
+
+# We will need the content of our Public Key in order to use our SCM (Source Code Management)
+# @required
+workstation_public_key: |
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzPCohSh2ANgj2qcYxfHFpmBpRlczvZ4lSz/g+AVoo0vhQg9bW7EZ87UvrOTShOC/cCA01VeC5SAZfoHUvtEQFwWP0DcGG2HC5XnFbhnnMAAHvFKIG7bQRmWE7B7rIxv7WjieqjJ5cGBC2poWfr1rVvHTsh2tsWVNCUeGmLxzj6ciBJAIMk7ry47paQORyUJQJFhTEinDc7ROhmkXA3qKUPo5yfXJTxPYhh8BhVctrHrwoBYzjrkKbPpCjy2quQqU5l1oufQa8IKVvTyxu2L6ychFp0h2YONDXYFJxCIzSzYlQElXD4d6kVUUDdsp/yNXEFtGUgnE4fN2UzjHiezgl pepitogrillo148@hotmail.com
+
+# This is the file where we store the password for the user of X11VNC
+# @required
+x11vnc_passwd_file: /home/{{ default_user }}/.vnc/passwd
+
+# If we want that our user can connect with the daemon of docker, we have to set here
+# @required
+docker_users:
+  - usuario
+
+# In order to modify with the correct content the file 
+# /etc/resolv.conf, we have fill this variable with
+# all the options that we want in our file.
+# @required
+resolve_conf_file_options:
+ - nameserver 127.0.0.1
+ - search casa.local
+ - options edns0 trust-ad
+
+# If we want to open a ports in our instance, we need put here 
+# which ports we need
+# @optional
+fw_ports:
+  - 22/tcp
+  - 5900/tcp
+
+# If we want to open a protocol in our instance, we need put here 
+# which protocols we need
+# @optional
+# fw_proto:
+
+# If we want change the protocol with the git in order to connect at our 
+# own git server we can use this configuration
+# @optional
+# git_protol:
+#  original: "git@gitlab.sudano.net:"
+#  replaceby: "https://gitlab.sudano.net/"

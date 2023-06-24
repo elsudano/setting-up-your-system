@@ -1,0 +1,48 @@
+# With this variable we can install or remove all the applications that we have or we want in our Workstation
+# @required
+package_list:
+  - state: present
+    packages:
+      - htop
+      - bash-completion
+      - code
+      - net-tools
+      - atop
+      - kubectl
+      - terraform
+      - firefox
+      - thunderbird
+      - google-chrome
+      #- google-cloud-cli
+      - snapper-gui
+      - git
+      - gnupg
+      - partitionmanager
+      - jq
+      - ark
+      - tree
+      - x11vnc
+      - libreoffice-fresh-es
+      - go
+      - dnsmasq
+      - vlc
+      - ffmpeg
+      - molecule
+  - state: absent
+    packages:
+      - vim
+
+go_programs:
+  - github.com/goreleaser/goreleaser@latest
+
+list_with_keys_to_load:
+  - /home/usuario/.ssh/id_rsa
+
+docker_packages:
+    - "docker"
+    - "docker-cli-bin"
+    - "docker-rootless-extras"
+docker_packages_state: present
+docker_install_compose: true
+docker_users:
+  - "{{ default_user }}"

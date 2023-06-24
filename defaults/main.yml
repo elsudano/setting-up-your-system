@@ -1,0 +1,26 @@
+---
+# In order to configure our NTP protocol we can choose which Time Zone we want
+# By Default: Europe/Madrid
+# @required
+ntp_timezone: Europe/Madrid
+
+# We can change the name of our Workstation
+# By Default: workstation
+# @required
+name_of_workstation: workstation
+
+# Value of GpG Key in order to sing your commits
+# You can see which are you IDs with this command:
+# gpg --list-secret-keys --keyid-format LONG <your_email>
+# By Default is empty
+# @required
+workstation_id_gpg_key: 
+
+# Default user thah we will created in the system
+# @required
+default_user: usuario
+
+# You can choose which is the value for your Swapiness
+# By Default is false
+# @required
+workstation_swapiness: false

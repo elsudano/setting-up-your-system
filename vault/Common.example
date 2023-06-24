@@ -1,0 +1,29 @@
+---
+# In order to configure our NTP protocol we can choose which Time Zone we want
+# By Default is empty
+# @required
+workstation_username:
+workstation_password:
+
+# We will need set which is the name that we want in our SCM (Source Code Management)
+# @required
+workstation_scm_name: 
+
+# We will need set which is the email that we want in our SCM (Source Code Management)
+# @required
+workstation_scm_email: 
+
+# This variable regarding of Source Code Management 
+# is to make easier the connection with the SCM
+# @required
+workstation_scm_token:
+
+# Value of GpG Key in order to sing your commits
+# You can see which are you IDs with this command:
+# gpg --list-secret-keys --keyid-format LONG <your_email>
+# @required
+workstation_id_gpg_key:
+
+# We will need the complete path of our Private Key in order to use our SCM (Source Code Management)
+# @required
+workstation_path_of_private_key: ""

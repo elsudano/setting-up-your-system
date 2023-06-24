@@ -1,0 +1,6 @@
+*.retry
+roles/
+virtualenv/
+vault/credentials.txt
+.vagrant
+*.bak

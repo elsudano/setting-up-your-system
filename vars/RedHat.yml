@@ -1,0 +1,10 @@
+---
+# With this variable we can install or remove all the applications that we have or we want in our Workstation
+# @required
+package_list:
+  - state: present
+    packages:
+      - terraform
+  - state: absent
+    packages:
+      - vim

@@ -1,0 +1,36 @@
+---
+- name: Install docker in Manjaro
+  include_role:
+    name: geerlingguy.docker
+
+- name: Upgrade all packages
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+
+- name: Install YAY in our system
+  community.general.pacman:
+    name: yay
+    state: present
+  when: ansible_pkg_mgr == 'pacman'
+
+- name: Install packages that we have in the list
+  command: yay -Sy --noconfirm {{ item.packages | join(' ') }}
+  when: item.state == 'present'
+  with_items: "{{ package_list }}"
+  become: false
+
+- name: Remove packages that we have in the list
+  command: yay -R --noconfirm {{ item.packages | join(' ') }}
+  when: item.state == 'absent'
+  with_items: "{{ package_list }}"
+  become: false
+
+# All tasks for RedHad family SO
+- name: Changing the size max of files that were can handle for Visual Studio Code
+  lineinfile:
+    path: /etc/sysctl.conf
+    regexp: 'fs.inotify.max_user_watches='
+    line: fs.inotify.max_user_watches=524288
+    create: yes
+  become: true

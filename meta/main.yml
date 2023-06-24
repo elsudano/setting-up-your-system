@@ -1,0 +1,29 @@
+---
+galaxy_info:
+  name: Automate Workstation Configure
+  author: 'Carlos Ariel de la Torre'
+  description: "Customize configuration of your Workstation"
+  company: 'SofTecnico'
+  role_name: setting_up_your_system
+  namespace: elsudano
+  license: privative
+
+  min_ansible_version: 1.2
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy
+    - name: Alma
+      versions:
+        - 8.6
+    - name: RedHat
+      versions:
+        - 7.9
+    - name: Manjaro
+      versions:
+        - 23.0
+
+  galaxy_tags: []
+
+dependencies: []

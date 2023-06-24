@@ -1,0 +1,67 @@
+# {{ ansible_managed }}
+
+# CLOUD CUSTOM FUNTIONS
+function create_local_gcp_config {
+  usage() {
+    echo
+    echo " Usage: create_local_gcp_config"
+    echo " Description: This function create and activate the GCP configuration project in LOCAL"
+    echo
+    echo " create_local_gcp_config [YOUR ACCOUNT] [REGION] [EXIST PROJECTID]"
+    echo " ex: create_local_gcp_config info@sudano,net europe-west1 e-commerce-comun"
+    echo
+    echo " create_local_gcp_config [YOUR ACCOUNT] [REGION] [EXIST PROJECTID] [ZONE]"
+    echo " ex: create_local_gcp_config info@sudano.net europe-west1 e-commerce-comun europe-west1-b"
+    echo
+    return 1
+  }
+  run() {
+    # Setting the correct project
+    if [ $(gcloud config configurations list --filter=$3 | tail -n +2 | wc -l) -eq 0 ]; then
+      gcloud config configurations create $3 2>/dev/null
+      DELETE_PROJECT=1
+    fi
+    gcloud config configurations activate $3 2>/dev/null
+    gcloud config set compute/region $2 2>/dev/null
+    gcloud config set compute/zone $4 2>/dev/null
+    gcloud config set account $1 2>/dev/null
+    gcloud config set project $3 2>/dev/null
+    gcloud config configurations list --filter=$3
+    gcloud config set survey/disable_prompts True
+  }
+  if [ "$1" != "" ] && [ "$2" != "" ] && [ "$3" != "" ];then
+    if [ "$4" != "" ];then
+      run $1 $2 $3 $4
+      return 1
+    fi
+    run $1 $2 $3
+    return 1
+  else
+    usage
+    return 0
+  fi
+}
+
+function remove_local_gcp_config {
+  usage() {
+    echo
+    echo " Usage: remove_local_gcp_config"
+    echo " Description: This function remove the GCP configuration project in LOCAL"
+    echo
+    echo " remove_local_gcp_config [EXIST PROJECTID]"
+    echo " ex: remove_local_gcp_config e-commerce-comun"
+    echo
+    return 1
+  }
+  run() {
+    gcloud config configurations activate default 2>/dev/null
+    gcloud config configurations delete $1 --quiet 2>/dev/null
+  }
+    if [ "$1" != "" ];then
+    run $1
+    return 1
+  else
+    usage
+    return 0
+  fi
+}

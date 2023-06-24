@@ -1,0 +1,354 @@
+ 
+---
+- name: Change the name of VM (Debian)
+  hostname:
+    name: "{{ name_of_workstation }}"
+  when: '"WSL" not in ansible_kernel'
+
+- name: Colorized prompt
+  replace:
+    path: ~/.bashrc
+    regexp: '#force_color_prompt=yes'
+    replace: 'force_color_prompt=yes'
+
+- name: All the configurations for GIT
+  tags: git
+  block:
+  - name: Configure your full name for Git configuration
+    git_config:
+      scope: global
+      name: user.name
+      value: "{{ workstation_scm_name }}"
+      state: present
+    become: false
+
+  - name: Configure your email for Git configuration
+    git_config:
+      scope: global
+      name: user.email
+      value: "{{ workstation_scm_email }}"
+      state: present
+    become: false
+
+  - name: Configure git protocol by default instead of http
+    git_config:
+      name: url.{{ git_protol.original }}.insteadOf
+      scope: global
+      value: "{{ git_protol.replaceby }}"
+      state: present
+    when: git_protol.original is defined and git_protol.replaceby is defined
+    become: false
+
+- name: We are configure the logrotate
+  tags: logrotate
+  block:
+  - name: Set default logrotate configuration
+    template:
+      src: logrotate/logrotate.conf.j2
+      dest: /etc/logrotate.conf
+
+  - name: Set wtmp logrotate configuration
+    template:
+      src: logrotate/wtmp.j2
+      dest: /etc/logrotate.d/wtmp
+
+  - name: Set btmp logrotate configuration
+    template:
+      src: logrotate/btmp.j2
+      dest: /etc/logrotate.d/btmp
+
+- name: Set swappines
+  sysctl:
+    name: vm.swappiness
+    value: "{{ workstation_swapiness }}"
+    state: present
+    sysctl_set: yes
+    reload: yes
+  when: workstation_swapiness != false
+
+- name: All releated with SCM and SSH
+  tags: bash_config
+  block:
+    - name: Enable the SSH-AGENT in the user session
+      blockinfile:
+        marker: "# {mark} Enable SSH-Agent"
+        path: "/home/{{ default_user }}/.bashrc"
+        state: present
+        block: |
+          eval "$(ssh-agent -s)"
+
+    - name: Load all the KEYs when user init session
+      lineinfile:
+        dest: "/home/{{ default_user }}/.bashrc"
+        regexp: "^eval \"$(ssh-agent -s)\""
+        line: "ssh-add {{ item }}"
+      with_items: 
+        "{{ list_with_keys_to_load }}"
+
+    - name: Adding basic configuration to .bashrc (Debian)
+      blockinfile:
+        path: "/home/{{ default_user }}/.bashrc"
+        marker: "# {mark} BASIC CONF"
+        state: present
+        block: |
+          LC_ALL=es_ES.UTF-8
+          LANGUAGE=es_ES
+          LANG=es_ES.UTF-8
+
+    - name: We are creating a new file in order to allow run commands in sudo mode at the user
+      copy:
+        content: "{{ default_user }} ALL=(ALL) NOPASSWD: ALL"
+        dest: "/etc/sudoers.d/{{ default_user }}"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Create a file for AutoComplete Kubectl
+      blockinfile:
+        marker: "# {mark} Kubectl AutoComplete CONF"
+        path: "/home/{{ default_user }}/.bashrc"
+        state: present
+        block: |
+          if [ -f /usr/bin/kubectl ]; then
+            source <(kubectl completion bash)
+          fi
+
+    - name: Create a file for AutoComplete Terraform
+      blockinfile:
+        marker: "# {mark} Terraform AutoComplete CONF"
+        path: "/home/{{ default_user }}/.bashrc"
+        state: present
+        block: |
+          if [ -f /usr/bin/terraform ]; then
+            complete -C /usr/bin/terraform terraform
+          fi
+
+    - name: Create a file for AutoComplete GoPass
+      blockinfile:
+        marker: "# {mark} GoPass AutoComplete CONF"
+        path: "/home/{{ default_user }}/.bashrc"
+        state: present
+        block: |
+          if [ -f /usr/bin/gopass ]; then
+            source <(gopass completion bash)
+          fi
+
+    - name: Create a file for AutoComplete Molecule
+      blockinfile:
+        marker: "# {mark} Molecule AutoComplete CONF"
+        path: "/home/{{ default_user }}/.bashrc"
+        state: present
+        block: |
+          if [ -f /usr/bin/molecule ]; then
+            eval "$(_MOLECULE_COMPLETE=bash_source molecule)"
+          fi
+
+- name: All releated with SCM and SSH
+  tags: ssh
+  block:
+    - name: We going to create a SSH folder to save the files
+      file:
+        path: "{{ lookup('env','HOME') }}/.ssh/"
+        state: directory
+        mode: 0755
+
+    - name: Add you PRIVATE key to a file in your home
+      copy:
+        content: "{{ workstation_private_key }}"
+        dest: "{{ lookup('env','HOME') }}/.ssh/id_rsa"
+        owner: "{{ default_user }}"
+        group: "{{ default_group }}"
+        mode: 0600
+
+    - name: Add you public key to a file in your home
+      copy:
+        content: "{{ workstation_public_key }}"
+        dest: "{{ lookup('env','HOME') }}/.ssh/id_rsa.pub"
+        owner: "{{ default_user }}"
+        group: "{{ default_group }}"
+        mode: 0644
+
+    - name: Add public key to authorized_hosts file for connect remotely (Debian)
+      authorized_key:
+        user: "{{ workstation_username }}"
+        state: present
+        key: "{{ workstation_public_key }}"
+
+- name: Ensure that the SSH daemon is correctly configure
+  tags: ssh
+  block:
+    - name: Ensure to send SSH client keep alive before firewalls cut the connection
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: "^ClientAliveInterval"
+        line: "ClientAliveInterval 30"
+
+    - name: Ensure to terminate SSH sessions with unresponsive clients
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: "^ClientAliveCountMax"
+        line: "ClientAliveCountMax 120"
+
+- name: All releated with SCM and GPG
+  tags: gpg
+  block:
+    - name: Configure gpgsing for Git configuration
+      git_config:
+        scope: global
+        name: commit.gpgsign
+        value: true
+
+    - name: Configure gpg program for Git configuration
+      git_config:
+        scope: global
+        name: gpg.program
+        value: gpg2
+
+    - name: Configure your ID gpg Key for Git configuration
+      git_config:
+        scope: global
+        name: user.signingkey
+        value: "{{ workstation_id_gpg_key }}"
+
+- name: Setting all the things to connect from out of the instance
+  tags: firewalld
+  block:
+    - name: Setting the correct interpreter of python 
+      set_fact:
+        ansible_python_interpreter: "/usr/bin/python"
+      tags: always
+
+    - name: Open requiered port in FirewallD
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        state: enabled
+      register: change_firewall_config
+      when: fw_ports is defined
+      with_items: "{{ fw_ports }}"
+
+    - name: Enable some protocols in Firewalld
+      ansible.posix.firewalld:
+        rich_rule: "rule protocol value={{ item }} accept"
+        permanent: true
+        state: enabled
+      register: change_firewall_config
+      when: fw_proto is defined
+      with_items: "{{ fw_proto }}"
+
+    - name: Reload and restart service FirewallD
+      ansible.builtin.systemd:
+        name: firewalld
+        state: restarted
+        enabled: true
+      when: change_firewall_config is changed
+
+- name: Setting all the things to connect remotelly by X11Vnc
+  tags: remote_manager
+  block:
+    - name: We have created the file with the service of X11Vnc
+      template:
+        src: "x11vnc.service.j2"
+        dest: "/lib/systemd/system/x11vnc.service"
+        owner: "root"
+        group: "root"
+        mode: 0644
+
+    - name: Setting the password for X11Vnc
+      command: x11vnc -storepasswd {{ workstation_password }} {{ x11vnc_passwd_file }}
+
+    - name: Ensure that X11Vnc service is enabled and running
+      service:
+        name: x11vnc
+        enabled: yes
+        daemon_reload: yes
+        state: started
+      when: ansible_check_mode == false
+
+- name: Setting all the configurations for GO-LANG
+  tags: bash_config
+  block:
+    - name: We are setting the GOROOT variable.
+      blockinfile:
+        path: "/home/{{ default_user }}/.bashrc"
+        marker: "# {mark} GO CONF"
+        state: present
+        block: |
+          if [ -f $(which go) ]; then
+            GOPATH=$(go env | grep GOPATH | awk -F = '{print $2}' | tr -d \")
+          fi
+          GOBIN=$GOPATH/bin
+          PATH=$PATH:$GOBIN
+
+    - name: Install all programs by go.
+      command: "go install {{ item }}"
+      with_items:
+        "{{ go_programs }}"
+
+- name: Configuring all the commands that we want in our Workstation
+  tags: custom_commands
+  block:
+    - name: Copy file of function to work with the cloud (GCP, AWS, AZURE)
+      template:
+        src: ".cloud_functions.j2"
+        dest: "/home/{{ default_user }}/.cloud_functions"
+        owner: "{{ default_user }}"
+        group: "{{ default_group }}"
+        mode: 0600
+
+    - name: Copy file of function other_functions to the home directory
+      template:
+        src: ".other_functions.j2"
+        dest: "/home/{{ default_user }}/.other_functions"
+        owner: "{{ default_user }}"
+        group: "{{ default_group }}"
+        mode: 0600
+
+    - name: Copy file of function generate_shadow_hash to the home directory
+      template:
+        src: ".generate_shadow_hash.j2"
+        dest: "/home/{{ default_user }}/.generate_shadow_hash"
+        owner: "{{ default_user }}"
+        group: "{{ default_group }}"
+        mode: 0600
+
+    - name: Copy file of function generate_shadow_hash to the home directory
+      template:
+        src: ".keepassxc.j2"
+        dest: "/home/{{ default_user }}/.keepassxc"
+        owner: "{{ default_user }}"
+        group: "{{ default_group }}"
+        mode: 0600
+
+    - name: Adding all the functions to .bashrc
+      blockinfile:
+        path: "/home/{{ default_user }}/.bashrc"
+        marker: "# {mark} FUNCTIONS EXTENDED"
+        state: present
+        block: |
+          [ -f ~/.cloud_functions ] && . ~/.cloud_functions
+          [ -f ~/.generate_shadow_hash ] && . ~/.generate_shadow_hash
+          [ -f ~/.other_functions ] && . ~/.other_functions
+          [ -f ~/.keepassxc ] && . ~/.keepassxc
+
+- name: Configuring all the things to dnsmasq
+  tags: dnsmasq
+  become: true
+  block:
+    - name: Populate service facts
+      service_facts:
+
+    - name: Disabled the systemd-resolv.service
+      service:
+        name: systemd-resolved.service
+        enabled: false
+        daemon_reload: yes
+        state: stopped
+      when: "'systemd-resolved' in services"
+
+    - name: Enabled the dnsmasq.service
+      service:
+        name: dnsmasq.service
+        enabled: yes
+        daemon_reload: yes
+        state: started

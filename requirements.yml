@@ -1,0 +1,11 @@
+- src: geerlingguy.ntp
+  version: "2.3.1"
+
+- src: geerlingguy.pip
+  version: "2.1.0"
+
+- src: geerlingguy.docker
+  version: "6.1.0"
+
+- src: willshersystems.sshd
+  version: "v0.15.1"

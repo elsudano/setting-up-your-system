@@ -1,0 +1,46 @@
+# {{ ansible_managed }}
+
+# FILESYSTEM
+umask 0022
+
+# GIT
+if [ -f /etc/bash_completion.d/git-prompt ]; then
+  source /etc/bash_completion.d/git-prompt
+  PS1=${PS1%\\\$ }'$(__git_ps1 " (%s)")\$ '
+  GIT_PS1_SHOWDIRTYSTATE=1
+  GIT_PS1_SHOWUNTRACKEDFILES=1
+  GIT_PS1_SHOWUPSTREAM="auto"
+  GIT_PS1_SHOWCOLORHINTS=1
+fi
+
+
+# ANSIBLE
+export ANSIBLE_NOCOWS=1
+
+# BASH HISTORY
+# Eternal bash history.
+# https://stackoverflow.com/questions/9457233/unlimited-bash-history
+# ---------------------
+# Undocumented feature which sets the size to "unlimited".
+# http://stackoverflow.com/questions/9457233/unlimited-bash-history
+export HISTFILESIZE=
+export HISTSIZE=
+export HISTTIMEFORMAT='%F %T '
+# Change the file location because certain bash sessions truncate .bash_history file upon close.
+# http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
+export HISTFILE=~/.bash_eternal_history
+# Force prompt to write history after every command.
+# http://superuser.com/questions/20900/bash-history-loss
+# Note: commands that "hang" or for some reason don't go back to the prompt won't be recorded.
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+
+# We will see the cotizations of Bitcoins
+alias nano='nano -l $1'
+alias gdif='git --no-pager diff'
+alias gstatusrecursive='for repo in $(find . -maxdepth 2 -mindepth 2 -type d); do cd $repo; git status; cd ../../; done'
+alias show_files_changed='echo "git diff --name-only HEAD^"; date; git diff --name-only HEAD^'
+alias show_files_last_commit='echo "git diff --name-only HEAD^.."; date; git diff --name-only HEAD^..'
+alias connect='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/usuario/.ssh/id_rsa '
+alias publicip='curl http://eth0.me/'
+alias showpass='gpg2 --decrypt $1 2>/dev/null'
+alias config_monitor='xrandr --output DP-1 --mode 3840x2160 --rate 50.00 --primary --output eDP-1 --mode 1920x1080 --rate 50.00 --pos 3840x540 --noprimary'

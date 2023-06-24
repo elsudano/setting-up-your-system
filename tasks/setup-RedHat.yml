@@ -1,0 +1,9 @@
+---
+# All tasks for RedHad family SO
+- name: Changing the size max of files that were can handle for Visual Studio Code
+  lineinfile:
+    path: /etc/sysctl.conf
+    regexp: 'fs.inotify.max_user_watches='
+    line: fs.inotify.max_user_watches=524288
+    create: yes
+  become: yes

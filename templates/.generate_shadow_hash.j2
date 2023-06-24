@@ -1,0 +1,45 @@
+# {{ ansible_managed }}
+
+# GENERATE SHADOW PASSWORD
+
+generate_shadow_hash() {
+	usage() {
+		echo
+        echo "Function to generate a password and its hash valid for the file /etc/shadow"
+		echo " Usage: generate_shadow_hash [num_size_pass 5-16] [password]"
+		echo
+		echo "  num_size_pass: is the number of chars will have the password, required"
+		echo "  password: is a password to which the hash is generated, optional"
+		echo
+		return 1
+	}
+
+	generate(){
+		case $1 in
+			5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16)
+				python -c "
+import random,string,crypt;
+randomsalt = ''.join(random.choice(string.ascii_letters) for i in range(16));
+password_characters = string.ascii_letters + string.digits + string.punctuation;
+randompass = ''.join(random.choice(password_characters) for i in range($1));
+print('This is the password: '+randompass);
+print('This is the hash: '+crypt.crypt(randompass, '\$6\$%s\$' % randomsalt));
+				"
+				;;
+			*)
+				python -c "
+import random,string,crypt;
+randomsalt = ''.join(random.choice(string.ascii_letters) for i in range(16));
+print('The password is: $1');
+print('This is the hash: '+crypt.crypt('$1', '\$6\$%s\$' % randomsalt));
+				"
+				;;
+		esac
+	}
+
+	if [ ! -z "$1" ]; then
+		generate $1
+	else
+		usage
+	fi
+}

@@ -1,0 +1,74 @@
+---
+- name: Upgrade all packages to the latest version (Debian)
+  apt:
+    upgrade: true
+    state: latest
+    update_cache: yes
+    autoremove: yes
+  become: true
+
+- local_action: stat path=/etc/cloud/cloud.cfg
+  register: config_file
+
+- name: Change configuration for to be able change name of VM (Debian)
+  lineinfile:
+    path: /etc/cloud/cloud.cfg
+    regexp: '^preserve_hostname:'
+    line: 'preserve_hostname: true'
+  become: true
+  when: config_file.stat.exists and ('WSL' not in ansible_kernel)
+
+- name: All related to install packages
+  become: true
+  block:
+    - name: Add an Apt signing key, uses whichever key is at the URL
+      apt_key:
+        url: "{{ item.repo_key }}"
+        state: present
+      with_items:
+        "{{ repo_list }}"
+      when: item.repo_key | default('', true) | trim != ''
+
+    - name: Set all the repositories that we need to install all the tools that we use.
+      apt_repository:
+        repo: "{{ item.repo }}"
+        state: "{{ item.state }}"
+        mode: 0644
+        filename: "{{ item.filename }}"
+      with_items:
+        "{{ repo_list }}"
+
+    - name: Install and Remove the Custom Packages that we want
+      apt:
+        name: "{{ item.packages }}"
+        state: "{{ item.state }}"
+        force: yes
+        update_cache: yes
+      with_items:
+        "{{ package_list }}"
+
+- name: Changing the size max of files that were can handle for Visual Studio Code
+  become: true
+  lineinfile:
+    path: /etc/sysctl.conf
+    regexp: 'fs.inotify.max_user_watches='
+    line: fs.inotify.max_user_watches=524288
+    create: yes
+
+- name: All releated with the services
+  become: true
+  block:
+    - name: Ensure sshd service is enabled and running
+      service:
+        name: ssh
+        enabled: yes
+        state: started
+
+    - name: Ensure atop service is enabled and running
+      service:
+        name: atop
+        enabled: yes
+        state: started
+
+
+# Instalar el cliente de mysql

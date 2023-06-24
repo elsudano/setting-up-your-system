@@ -1,0 +1,120 @@
+# We can use this variable in order to set all the repositories that we want
+# @required
+repo_list:
+  - description: Visual Studio Code
+    filename: code-studio
+    repo: https://packages.microsoft.com/yumrepos/vscode/
+    metalink: ''
+    repo_key: https://packages.microsoft.com/keys/microsoft.asc
+    enabled: true
+    gpgcheck: false
+    repo_gpgcheck: false
+    metadata_expire: 1h
+  - description: ELRepo.org Community Enterprise Linux Repository - el9
+    filename: elrepo
+    repo: http://elrepo.org/linux/elrepo/el9/$basearch/
+            http://mirrors.coreix.net/elrepo/elrepo/el9/$basearch/
+            http://mirror.rackspace.com/elrepo/elrepo/el9/$basearch/
+            http://linux-mirrors.fnal.gov/linux/elrepo/elrepo/el9/$basearch/
+    metalink: http://mirrors.elrepo.org/mirrors-elrepo.el9
+    enabled: true
+    gpgcheck: true
+    repo_gpgcheck: false
+    repo_key: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org
+    metadata_expire: 1h
+  - description: Extra Packages for Enterprise Linux $releasever - Next - $basearch
+    filename: epel-next
+    # It is much more secure to use the metalink, but if you wish to use a local mirror
+    # place its address here.
+    repo: https://download.example/pub/epel/next/$releasever/Everything/$basearch/
+    metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-next-$releasever&arch=$basearch&infra=$infra&content=$contentdir
+    enabled: true
+    gpgcheck: true
+    repo_gpgcheck: false
+    repo_key: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever
+    metadata_expire: 1h
+  - description: AlmaLinux-$releasever-CRB
+    filename: almalinux-CRB
+    repo: https://repo.almalinux.org/almalinux/9.0/CRB/x86_64/os/
+    metalink: ''
+    repo_key: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    enabled: true
+    gpgcheck: false
+    repo_gpgcheck: false
+    metadata_expire: 1h
+  - description: RPM Fusion for EL 9 Free Updates
+    filename: rpmfusion-free-updates
+    repo: http://download1.rpmfusion.org/free/el/updates/9/$basearch/
+    metalink: http://mirrors.rpmfusion.org/metalink?repo=free-el-updates-released-9&arch=$basearch
+    repo_key: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-el-9
+    enabled: true
+    gpgcheck: false
+    repo_gpgcheck: false
+    metadata_expire: 1h
+  - description: RPM Fusion for EL 9 Nonfree Updates
+    filename: rpmfusion-nonfree-updates
+    repo: http://download1.rpmfusion.org/nonfree/el/updates/9/$basearch/
+    metalink: http://mirrors.rpmfusion.org/metalink?repo=nonfree-el-updates-released-9&arch=$basearch
+    repo_key: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-el-9
+    enabled: true
+    gpgcheck: true
+    repo_gpgcheck: false
+    metadata_expire: 1h
+  - description: Google Chrome repository
+    filename: google-chrome
+    repo: http://dl.google.com/linux/chrome/rpm/stable/$basearch
+    metalink: ''
+    repo_key: https://dl.google.com/linux/linux_signing_key.pub
+    enabled: true
+    gpgcheck: false
+    repo_gpgcheck: false
+    metadata_expire: 1h
+
+# With this variable we can install or remove all the applications that we have or we want in our Workstation
+# @required
+package_list:
+  - state: present
+    packages:
+      - yum-utils
+      - htop
+      - bash-completion
+      - glibc-common
+      - glibc-locale-source
+      - glibc-langpack-es
+      - NetworkManager-openvpn
+      - ca-certificates
+      - curl
+      - yakuake
+      - code
+      - net-tools
+      - atop
+      - kubectl
+      #- terraform
+      - firefox
+      - thunderbird
+      - google-chrome-stable
+      - google-cloud-cli
+      - git
+      - gnupg2
+      - rng-tools
+      - kde-partitionmanager
+      - jq
+      - ark
+      - tree
+      - x11vnc
+      - libreoffice-writer
+      - libreoffice-calc
+      - golang
+      - dnsmasq
+      - vlc
+      - ffmpeg
+      - ffmpeg-devel
+  - state: absent
+    packages:
+      - vim
+
+go_programs:
+  - github.com/goreleaser/goreleaser@latest
+
+list_with_keys_to_load:
+  - /home/usuario/.ssh/id_rsa

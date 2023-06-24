@@ -1,0 +1,47 @@
+# {{ ansible_managed }}
+
+#!/usr/bin/env bash
+
+INTERFACE=$1
+EVENT=$2
+
+if [ "$INTERFACE" = "tun0" -a "$EVENT" = "up" ]; then
+    TUNIP=$(ip address show $INTERFACE | grep inet | head -n 1 | awk '{print $4}' | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+    
+    echo "The $INTERFACE received the event $EVENT" | systemd-cat -p info -t setting_custom_options_dispacher_script
+    echo "Adding routes in TUN0 ..." | systemd-cat -p info -t setting_custom_options_dispacher_script
+{% for nettun in networks_to_add_route_in_tun0 %}
+    ip route add {{ nettun }} via $TUNIP dev tun0
+{% endfor %}
+
+    echo "Configuring by default the file /etc/resolv.conf ..." | systemd-cat -p info -t setting_custom_options_dispacher_script
+    echo "" > /etc/resolv.conf # we clean all the options in the resolv.conf file
+{% for option in resolve_conf_file_options %}
+    echo "{{ option }}" >> /etc/resolv.conf
+{% endfor %}
+
+elif [ "$INTERFACE" = "gpd0" -a "$EVENT" = "up" ]; then
+    GPDIP=$(ip address show $INTERFACE | grep inet | awk '{print $2}' | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+
+    echo "The $INTERFACE received the event $EVENT" | systemd-cat -p info -t setting_custom_options_dispacher_script
+    echo "Adding routes in GPD0 ..." | systemd-cat -p info -t setting_custom_options_dispacher_script
+{% for netgpd in networks_to_add_route_in_gpd0 %}
+    ip route add {{ netgpd }} via $GPDIP dev $INTERFACE
+{% endfor %}
+
+    echo "Cleaning DNS /etc/resolv.conf ..." | systemd-cat -p info -t setting_custom_options_dispacher_script
+    sed -i '/nameserver 10\.5\.2.*/d' /etc/resolv.conf
+
+    echo "Cleaning route by default ..." | systemd-cat -p info -t setting_custom_options_dispacher_script
+    ip route del default via $GPDIP dev gpd0
+
+elif [ "$INTERFACE" = "gpd0" -a "$EVENT" = "down" ]; then
+    echo "The $INTERFACE received the event $EVENT" | systemd-cat -p info -t setting_custom_options_dispacher_script
+    echo "Clossing application Global Protect ..." | systemd-cat -p info -t setting_custom_options_dispacher_script
+    sleep 2
+    for PID in $(ps -auxwww | grep protect | grep -v grep | awk '{print $2}'); do
+        kill -9 $PID;
+    done
+else
+    echo "Nothing to see here ..." | systemd-cat -p info -t setting_custom_options_dispacher_script
+fi

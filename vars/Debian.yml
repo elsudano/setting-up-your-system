@@ -1,0 +1,71 @@
+---
+# We can use this variable in order to set all the repositories that we want
+# @required
+repo_list:
+  - state: present
+    repo: 'deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main'
+    filename: 'code-studio'
+    repo_key: 'https://packages.microsoft.com/keys/microsoft.asc'
+
+  - state: present
+    repo: 'deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main'
+    filename: 'kubernetes'
+
+  - state: present
+    repo: 'deb [arch=amd64] https://apt.releases.hashicorp.com jammy main'
+    filename: 'hashicorp'
+
+  - state: present
+    repo: 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main'
+    filename: 'google'
+    repo_key: 'https://dl.google.com/linux/linux_signing_key.pub'
+
+  - state: present
+    repo: 'deb https://packages.cloud.google.com/apt cloud-sdk main'
+    filename: 'google-sdk'
+
+  - state: present
+    repo: 'deb https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/ jammy main'
+    filename: 'mozilla'
+
+# With this variable we can install or remove all the applications that we have or we want in our Workstation
+# @required
+package_list:
+  - state: present
+    packages:
+      - apt-transport-https
+      - apt-transport-s3
+      - kio-gdrive
+      - network-manager-openvpn
+      - ca-certificates
+      - curl
+      - yakuake
+      - code
+      - net-tools
+      - atop
+      - kubectl
+      - terraform
+      - firefox
+      - thunderbird
+      - google-chrome-stable
+      - google-cloud-cli
+      - git
+      - gnupg2
+      - rng-tools
+      - jq
+      - ark
+      - tree
+      - x11vnc
+      - libreoffice
+      - golang-go
+      - dnsmasq
+  - state: absent
+    packages:
+      - muon
+      - snapd
+
+go_programs:
+  - github.com/gopasspw/gopass@latest
+
+list_with_keys_to_load:
+  - ~/.ssh/id_rsa
