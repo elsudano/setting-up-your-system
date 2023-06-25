@@ -28,6 +28,7 @@ package_list:
       - vlc
       - ffmpeg
       - molecule
+      - firewalld
   - state: absent
     packages:
       - vim
