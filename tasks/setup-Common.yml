@@ -254,8 +254,14 @@
         group: "root"
         mode: 0644
 
+    - name: We going to create a VNC folder to save the files
+      file:
+        path: "{{ lookup('env','HOME') }}/.vnc/"
+        state: directory
+        mode: 0755
+
     - name: Setting the password for X11Vnc
-      command: x11vnc -storepasswd {{ workstation_password }} {{ x11vnc_passwd_file }}
+      command: x11vnc -storepasswd "{{ workstation_password }}" {{ x11vnc_passwd_file }}
 
     - name: Ensure that X11Vnc service is enabled and running
       service:
