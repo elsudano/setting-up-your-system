@@ -25,7 +25,7 @@ if [ "$OS" = "Suse" ]; then
     sudo zypper install ansible nano make python3-virtualenv
     sudo ln -s $(which python3.6) /usr/bin/python
 fi
-if [ "$OS" = "Archlinux" ]; then
+if [ "$OS" = "Archlinux" ] || [ "$OS" = "Manjaro" ]; then
     sudo pacman -Syu
-    sudo pacman -Sy ansible git make python 
+    sudo pacman -Sy yay ansible git make python 
 fi
