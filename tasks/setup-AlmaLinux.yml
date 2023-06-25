@@ -1,27 +1,30 @@
 ---
-- name: Add repositories at the list
-  ansible.builtin.yum_repository:
-    name: "{{ item.filename }}"
-    description: "{{ item.description }}"
-    file: "{{ item.filename }}"
-    baseurl: "{{ item.repo }}"
-    metalink: "{{ item.metalink }}"
-    gpgcheck: "{{ item.gpgcheck }}"
-    repo_gpgcheck: "{{ item.repo_gpgcheck }}"
-    enabled: "{{ item.enabled }}"
-    metadata_expire: "{{ item.metadata_expire }}"
-  with_items: "{{ repo_list }}"
+- name: Install all packages that we will need in our system
+  tags: packages
+  block:
+    - name: Add repositories at the list
+      ansible.builtin.yum_repository:
+        name: "{{ item.filename }}"
+        description: "{{ item.description }}"
+        file: "{{ item.filename }}"
+        baseurl: "{{ item.repo }}"
+        metalink: "{{ item.metalink }}"
+        gpgcheck: "{{ item.gpgcheck }}"
+        repo_gpgcheck: "{{ item.repo_gpgcheck }}"
+        enabled: "{{ item.enabled }}"
+        metadata_expire: "{{ item.metadata_expire }}"
+      with_items: "{{ repo_list }}"
 
-- name: Upgrade all packages
-  ansible.builtin.dnf:
-    name: "*"
-    state: latest
+    - name: Upgrade all packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
 
-- name: Install packages that we have in the list
-  ansible.builtin.dnf:
-    name: "{{ item.packages }}"
-    state: "{{ item.state }}"
-  with_items: "{{ package_list }}"
+    - name: Install packages that we have in the list
+      ansible.builtin.dnf:
+        name: "{{ item.packages }}"
+        state: "{{ item.state }}"
+      with_items: "{{ package_list }}"
 
 # All tasks for RedHad family SO
 - name: Changing the size max of files that were can handle for Visual Studio Code

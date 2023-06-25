@@ -20,6 +20,7 @@
 
 - name: All related to install packages
   become: true
+  tags: packages
   block:
     - name: Add an Apt signing key, uses whichever key is at the URL
       apt_key:
