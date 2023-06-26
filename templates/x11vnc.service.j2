@@ -1,12 +1,11 @@
 [Unit]
 Description=VNC Server for X11
-Requires=graphical.target
-After=display-manager.service network.target syslog.target graphical.target
+After=display-manager.service network.target syslog.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/x11vnc -rfbauth {{ x11vnc_passwd_file }} -auth /home/usuario/.Xauthority -nopw -noscr -nowf -noxkb -xwarppointer -forever -display :0
-ExecStop=/usr/bin/killall x11vnc
+ExecStart=/usr/bin/x11vnc -rfbauth {{ x11vnc_passwd_file }} -auth /home/usuario/.Xauthority -usepw -nowf -noxdamage -forever -loop -shared -noscr -noxkb -xwarppointer
+ExecStop=kill -9 $(ps -ef | grep x11vnc | grep usuario | grep -v grep | head -1 | awk '{print $2}')c
 Restart=on-failure
 
 [Install]
