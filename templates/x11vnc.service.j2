@@ -4,9 +4,9 @@ After=display-manager.service network.target syslog.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/x11vnc -rfbauth {{ x11vnc_passwd_file }} -auth /home/usuario/.Xauthority -usepw -nowf -noxdamage -forever -loop -shared -noscr -noxkb -xwarppointer
+ExecStart=/usr/bin/x11vnc -rfbauth {{ x11vnc_passwd_file }} -auth /home/usuario/.Xauthority -usepw -nowf -noxdamage -forever -loop -shared
 ExecStop=kill -9 $(ps -ef | grep x11vnc | grep usuario | grep -v grep | head -1 | awk '{print $2}')c
 Restart=on-failure
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target
