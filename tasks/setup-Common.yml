@@ -243,6 +243,17 @@
         enabled: true
       when: change_firewall_config is changed
 
+    - name: Disable IPv6 for all interfaces
+      sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value }}"
+        sysctl_set: yes
+        state: present
+        reload: yes
+      with_items:
+        - { key: net.ipv6.conf.all.disable_ipv6, value: 1 }
+        - { key: net.ipv6.conf.default.disable_ipv6, value: 1 }
+
 - name: Setting all the things to connect remotelly by X11Vnc
   tags: remote_manager
   block:
