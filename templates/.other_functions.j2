@@ -91,3 +91,6 @@ alias connect='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -
 alias publicip='curl http://eth0.me/'
 alias showpass='gpg2 --decrypt $1 2>/dev/null'
 alias config_monitor='xrandr --output DP-1 --mode 3840x2160 --rate 50.00 --primary --output eDP-1 --mode 1920x1080 --rate 50.00 --pos 3840x540 --noprimary'
+alias k='sudo microk8s kubectl'
+alias ka='sudo microk8s kubectl get all --all-namespaces'
+alias ll='ls -lah --group-directories-first'
