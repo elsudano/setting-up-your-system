@@ -8,10 +8,10 @@ if [ ! -f ~/.ssh/id_rsa ]; then
     ssh-keygen -b 4096 -t rsa
     cat ~/.ssh/id_rsa.pub | tee -a ~/.ssh/authorized_keys > /dev/null
 fi
-if [ ! -f ~/.ssh/id_ed25519 ]; then
-    ssh-keygen -t ed25519 -a 100 -b 4096
-    cat ~/.ssh/id_ed25519.pub | tee -a ~/.ssh/authorized_keys > /dev/null
-fi
+# if [ ! -f ~/.ssh/id_ed25519 ]; then
+#     ssh-keygen -t ed25519 -a 100 -b 4096
+#     cat ~/.ssh/id_ed25519.pub | tee -a ~/.ssh/authorized_keys > /dev/null
+# fi
 if [ "$OS" = "Ubuntu" ]; then
     sudo apt update && sudo apt -y install nano git make python3-virtualenv ansible openssh-server
     sudo update-alternatives --set editor $(which nano)
