@@ -95,5 +95,6 @@ alias k='sudo microk8s kubectl'
 alias kall='sudo microk8s kubectl get all --all-namespaces'
 alias kapply='sudo microk8s kubectl apply -f'
 alias kds='sudo microk8s kubectl delete service'
-alias dbsecret="sudo microk8s kubectl describe secret -n kube-system microk8s-dashboard-token"
+alias kdbsecret="sudo microk8s kubectl describe secret -n kube-system microk8s-dashboard-token"
+alias kdbportforward="sudo microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --address 0.0.0.0"
 alias ll='ls -lah --group-directories-first'
