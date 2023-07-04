@@ -32,6 +32,11 @@
       when: ansible_distribution == 'Debian'
       tags: 'always'
 
+    - name: Include all the Ubuntu tasks
+      include_tasks: tasks/setup-Debian.yml
+      when: ansible_distribution == 'Ubuntu'
+      tags: 'always'
+
     - name: Include all the Archlinux tasks
       include_tasks: tasks/setup-Archlinux.yml
       when: ansible_distribution == 'Archlinux'
