@@ -1,3 +1,4 @@
+SHELL = /bin/bash
 INVENTORY = inventory
 PYTHON_VERSION = 3
 VIRTUALENV = virtualenv
