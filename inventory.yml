@@ -1,0 +1,22 @@
+local:
+  hosts:
+    localhost:
+      ansible_connection: local
+
+remote:
+  hosts:
+    server:
+      ansible_ssh_user: usuario
+      ansible_host: server.casa.local
+      short_host: server
+      name_of_workstation: server
+    master:
+      ansible_ssh_user: usuario
+      ansible_host: master.casa.local
+      short_host: master
+      name_of_workstation: master
+    node1:
+      ansible_ssh_user: usuario
+      ansible_host: node1.casa.local
+      short_host: node1
+      name_of_workstation: node1

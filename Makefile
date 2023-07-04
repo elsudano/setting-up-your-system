@@ -1,5 +1,5 @@
 SHELL = /bin/bash
-INVENTORY = inventory
+INVENTORY = inventory.yml
 PYTHON_VERSION = 3
 VIRTUALENV = virtualenv
 VAULT_ANSIBLE = vault
