@@ -31,7 +31,7 @@ package_list:
       - firewalld
   - state: absent
     packages:
-      - vim
+      #- vim
 
 go_programs:
   - github.com/goreleaser/goreleaser@latest
