@@ -29,6 +29,49 @@
       with_items: "{{ package_list }}"
       become: false
 
+- name: Setting all the things to Microk8s start automatically
+  tags: microk8s
+  block:
+    - name: Ensure that Cluster Agent service is enabled and running
+      service:
+        name: snap.microk8s.daemon-cluster-agent.service
+        enabled: yes
+        daemon_reload: yes
+        state: started
+      when: ansible_check_mode == false
+
+    - name: Ensure that Containerd service is enabled and running
+      service:
+        name: snap.microk8s.daemon-containerd.service
+        enabled: yes
+        daemon_reload: yes
+        state: started
+      when: ansible_check_mode == false
+
+    - name: Ensure that K8-Dqlite service is enabled and running
+      service:
+        name: snap.microk8s.daemon-k8s-dqlite.service
+        enabled: yes
+        daemon_reload: yes
+        state: started
+      when: ansible_check_mode == false
+
+    - name: Ensure that Kubelite service is enabled and running
+      service:
+        name: snap.microk8s.daemon-kubelite.service
+        enabled: yes
+        daemon_reload: yes
+        state: started
+      when: ansible_check_mode == false
+
+    - name: Ensure that ApiServer-Kicker service is enabled and running
+      service:
+        name: snap.microk8s.daemon-apiserver-kicker.service
+        enabled: yes
+        daemon_reload: yes
+        state: started
+      when: ansible_check_mode == false
+   
 # All tasks for RedHad family SO
 - name: Changing the size max of files that were can handle for Visual Studio Code
   lineinfile:

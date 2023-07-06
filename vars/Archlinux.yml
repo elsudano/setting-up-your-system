@@ -29,6 +29,7 @@ package_list:
       - ffmpeg
       - molecule
       - firewalld
+      - iptables-persistent
   - state: absent
     packages:
       #- vim
