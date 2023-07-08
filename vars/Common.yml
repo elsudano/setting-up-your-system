@@ -20,14 +20,6 @@ config_system_locale: es_ES.UTF-8
 # @required
 config_system_language: es_ES.UTF-8
 
-<<<<<<< Updated upstream
-=======
-
-# We can change the name of our Workstation
-# By Default: workstation
-name_of_workstation: master
-
->>>>>>> Stashed changes
 # Default user thah we will created in the system
 # @required
 default_user: usuario
