@@ -32,6 +32,25 @@
 - name: Setting all the things to Microk8s start automatically
   tags: microk8s
   block:
+    - name: Ensure that SnapD is available
+      service:
+        name: snapd
+        enabled: yes
+        daemon_reload: yes
+        state: started
+      when: ansible_check_mode == false
+
+    - name: Create a Snap symbolic link 
+      file:
+        src: "/var/lib/snapd/snap"
+        dest: "/snap"
+        state: link
+
+    - name: Install "Microk8s" with option --classic
+      snap:
+        name: microk8s
+        classic: true
+
     - name: Ensure that Cluster Agent service is enabled and running
       service:
         name: snap.microk8s.daemon-cluster-agent.service

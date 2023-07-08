@@ -30,6 +30,7 @@ package_list:
       - molecule
       - firewalld
       - iptables-persistent
+      - snapd
   - state: absent
     packages:
       #- vim
