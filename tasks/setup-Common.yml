@@ -30,6 +30,14 @@
       state: present
     become: false
 
+  - name: Configure your default editor for Git configuration
+    git_config:
+      scope: global
+      name: core.editor
+      value: "{{ default_editor }}"
+      state: present
+    become: false
+
   - name: Configure git protocol by default instead of http
     git_config:
       name: url.{{ git_protol.original }}.insteadOf

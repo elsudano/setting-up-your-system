@@ -64,6 +64,18 @@ fi
 # ANSIBLE
 export ANSIBLE_NOCOWS=1
 
+# DEFAULT EDITOR
+if which vim &>/dev/null; then
+  export EDITOR="vim"
+elif which emacs &>/dev/null; then
+  export EDITOR="emacs -nw"
+else
+  export EDITOR="nano"
+fi
+
+# KUBERNETES EDITOR
+export KUBE_EDITOR=nano
+
 # BASH HISTORY
 # Eternal bash history.
 # https://stackoverflow.com/questions/9457233/unlimited-bash-history

@@ -24,3 +24,8 @@ default_user: usuario
 # By Default is false
 # @required
 workstation_swapiness: false
+
+# You can choose which is the value for your default Editor
+# By Default is nano
+# @required
+default_editor: nano
