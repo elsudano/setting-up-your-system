@@ -60,8 +60,13 @@ resolve_conf_file_options:
 # @optional
 fw_ports:
   - 22/tcp
+  - 5601/tcp
   - 5900/tcp
+  - 9200/tcp
+  - 16443/tcp
+  - 24231/tcp
   - 25000/tcp
+  - 19001/tcp
 
 # If we want to open a protocol in our instance, we need put here 
 # which protocols we need
