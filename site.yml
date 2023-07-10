@@ -6,16 +6,17 @@
   become_user: root
 
   pre_tasks:
+    - name: "Include default variables"
+      include_vars: defaults/main.yml
+
     - name: "Include Common file with the common variables"
       include_vars: "{{ item }}.yml"
       with_items:
         - Common
         - vault/Common
-      tags: 'always'
 
     - name: "Include vault/{{ ansible_distribution }}.yml and {{ ansible_distribution }}.yml variables in order to complete the tasks"
       include_vars: "{{ item }}.yml"
-      tags: 'always'
       with_items:
         - "{{ ansible_distribution }}"
         - "vault/{{ ansible_distribution }}"
@@ -27,40 +28,32 @@
     - { role: geerlingguy.docker, become: yes, when: ansible_distribution in distributions }
 
   tasks:
+    - name: Include all the common tasks
+      include_tasks: tasks/setup-Common.yml
+
     - name: Include all the Debian tasks
       include_tasks: tasks/setup-Debian.yml
       when: ansible_distribution == 'Debian'
-      tags: 'always'
 
     - name: Include all the Ubuntu tasks
       include_tasks: tasks/setup-Debian.yml
       when: ansible_distribution == 'Ubuntu'
-      tags: 'always'
 
     - name: Include all the Archlinux tasks
       include_tasks: tasks/setup-Archlinux.yml
       when: ansible_distribution == 'Archlinux'
-      tags: 'always'
 
     - name: Include all the AlmaLinux tasks
       include_tasks: tasks/setup-AlmaLinux.yml
       when: ansible_distribution == 'AlmaLinux'
-      tags: 'always'
 
     - name: Include all the RedHat tasks
       include_tasks: tasks/setup-RedHat.yml
       when: ansible_distribution == 'RedHat'
-      tags: 'always'
 
-    - name: Include all the common tasks
-      include_tasks: tasks/setup-Common.yml
-      tags: 'always'
-      
     - name: Include all the Post instalation tasks
       include_tasks: tasks/setup-Post.yml
-      tags: 'always'
 
   handlers:
     - name: Include all the Handlers tasks
       include_tasks: "handlers/main.yml"
-      tags: 'always'
