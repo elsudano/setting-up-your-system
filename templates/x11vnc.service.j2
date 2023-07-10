@@ -1,6 +1,6 @@
 [Unit]
 Description=VNC Server for X11
-After=display-manager.service network.target syslog.target
+Requires=graphical.target
 
 [Service]
 Type=simple
