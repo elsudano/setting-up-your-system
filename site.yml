@@ -7,15 +7,18 @@
 
   pre_tasks:
     - name: "Include default variables"
+      tags: always
       include_vars: defaults/main.yml
 
     - name: "Include Common file with the common variables"
+      tags: always
       include_vars: "{{ item }}.yml"
       with_items:
         - Common
         - vault/Common
 
     - name: "Include vault/{{ ansible_distribution }}.yml and {{ ansible_distribution }}.yml variables in order to complete the tasks"
+      tags: always
       include_vars: "{{ item }}.yml"
       with_items:
         - "{{ ansible_distribution }}"
@@ -29,31 +32,39 @@
 
   tasks:
     - name: Include all the common tasks
+      tags: always
       include_tasks: tasks/setup-Common.yml
 
     - name: Include all the Debian tasks
+      tags: always
       include_tasks: tasks/setup-Debian.yml
       when: ansible_distribution == 'Debian'
 
     - name: Include all the Ubuntu tasks
+      tags: always
       include_tasks: tasks/setup-Debian.yml
       when: ansible_distribution == 'Ubuntu'
 
     - name: Include all the Archlinux tasks
+      tags: always
       include_tasks: tasks/setup-Archlinux.yml
       when: ansible_distribution == 'Archlinux'
 
     - name: Include all the AlmaLinux tasks
+      tags: always
       include_tasks: tasks/setup-AlmaLinux.yml
       when: ansible_distribution == 'AlmaLinux'
 
     - name: Include all the RedHat tasks
+      tags: always
       include_tasks: tasks/setup-RedHat.yml
       when: ansible_distribution == 'RedHat'
 
     - name: Include all the Post instalation tasks
+      tags: always
       include_tasks: tasks/setup-Post.yml
 
   handlers:
     - name: Include all the Handlers tasks
+      tags: always
       include_tasks: "handlers/main.yml"

@@ -32,6 +32,12 @@
 - name: Setting all the things to Microk8s start automatically
   tags: microk8s
   block:
+    - name: Create a .kube folder
+      file:
+        dest: "/home/{{ default_user }}/.kube/"
+        state: present
+        mode: directory
+
     - name: Ensure that SnapD is available
       service:
         name: snapd

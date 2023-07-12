@@ -1,3 +1,10 @@
 ---
 - name: rebuild alias file
   command: newaliases
+
+- name: Enabled the sshd.service
+  service:
+    name: sshd.service
+    enabled: yes
+    daemon_reload: yes
+    state: started

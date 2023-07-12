@@ -309,6 +309,7 @@
       command: "go install {{ item }}"
       with_items:
         "{{ go_programs }}"
+      when: ansible_check_mode == false and go_programs is defined
 
 - name: Configuring all the commands that we want in our Workstation
   tags: custom_commands

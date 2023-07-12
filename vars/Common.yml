@@ -60,6 +60,7 @@ resolve_conf_file_options:
 # @optional
 fw_ports:
   - 22/tcp
+  - 5432/tcp
   - 5601/tcp
   - 5900/tcp
   - 9200/tcp
