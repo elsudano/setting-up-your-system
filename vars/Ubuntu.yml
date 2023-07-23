@@ -35,30 +35,19 @@ package_list:
     packages:
       - apt-transport-https
       - apt-transport-s3
-      - kio-gdrive
-      - network-manager-openvpn
       - ca-certificates
       - curl
-      - yakuake
-      - code
       - net-tools
-      - atop
-      - kubectl
-      - terraform
-      - firefox
-      - thunderbird
-      - google-chrome-stable
-      - google-cloud-cli
       - git
       - gnupg2
-      - rng-tools
       - jq
-      - ark
       - tree
-      - x11vnc
-      - libreoffice
-      - golang-go
       - dnsmasq
+      - nano
+      - make
+      - python3.10-venv
+      - python3-firewall
+      - firewalld
   - state: absent
     packages:
       - muon

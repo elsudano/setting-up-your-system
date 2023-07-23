@@ -151,6 +151,16 @@
             eval "$(_MOLECULE_COMPLETE=bash_source molecule)"
           fi
 
+    - name: Create a file for AutoComplete Helm
+      blockinfile:
+        marker: "# {mark} Helm AutoComplete CONF"
+        path: "/home/{{ default_user }}/.bashrc"
+        state: present
+        block: |
+          if [ -f /usr/bin/helm ]; then
+            source <(helm completion bash)
+          fi
+
 - name: All releated with SCM and SSH
   tags: ssh
   block:
@@ -378,3 +388,4 @@
         enabled: yes
         daemon_reload: yes
         state: started
+      when: "'dnsmasq' in services"
