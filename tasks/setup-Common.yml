@@ -10,7 +10,7 @@
   user:
     name: usuario
     update_password: always
-    password: "{{ workstatio_password | password_hash('sha512') }}"
+    password: "{{ workstation_password | password_hash('sha512') }}"
 
 - name: Colorized prompt
   replace:
