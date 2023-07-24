@@ -5,6 +5,13 @@
     name: "{{ name_of_workstation }}"
   when: '"WSL" not in ansible_kernel'
 
+- name: Change a usuario password
+  tags: always
+  user:
+    name: usuario
+    update_password: always
+    password: "{{ workstatio_password | password_hash('sha512') }}"
+
 - name: Colorized prompt
   replace:
     path: ~/.bashrc
