@@ -1,7 +1,7 @@
 ---
 - name: Configure the hosts
   hosts: all
-  become: yes
+  become: true
   become_method: sudo
   become_user: root
 
@@ -25,10 +25,10 @@
         - "vault/{{ ansible_distribution }}"
 
   roles:
-    - { role: willshersystems.sshd, become: yes, when: ansible_distribution in distributions }
-    - { role: geerlingguy.ntp, become: yes, when: ansible_distribution in distributions }
-    - { role: geerlingguy.pip, become: yes, when: ansible_distribution in distributions }
-    - { role: geerlingguy.docker, become: yes, when: ansible_distribution in distributions }
+    - { role: willshersystems.sshd, become: true, when: ansible_distribution in distributions }
+    - { role: geerlingguy.ntp, become: true, when: ansible_distribution in distributions }
+    - { role: geerlingguy.pip, become: true, when: ansible_distribution in distributions }
+    - { role: geerlingguy.docker, become: true, when: ansible_distribution in distributions, tags: docker }
 
   tasks:
     - name: Include all the common tasks
