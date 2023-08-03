@@ -92,21 +92,3 @@ export HISTFILE=~/.bash_eternal_history
 # http://superuser.com/questions/20900/bash-history-loss
 # Note: commands that "hang" or for some reason don't go back to the prompt won't be recorded.
 export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-
-# We will see the cotizations of Bitcoins
-alias nano='nano -l $1'
-alias gdif='git --no-pager diff'
-alias gstatusrecursive='for repo in $(find . -maxdepth 2 -mindepth 2 -type d); do cd $repo; git status; cd ../../; done'
-alias show_files_changed='echo "git diff --name-only HEAD^"; date; git diff --name-only HEAD^'
-alias show_files_last_commit='echo "git diff --name-only HEAD^.."; date; git diff --name-only HEAD^..'
-alias connect='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/usuario/.ssh/id_rsa '
-alias publicip='curl http://eth0.me/'
-alias showpass='gpg2 --decrypt $1 2>/dev/null'
-alias config_monitor='xrandr --output DP-1 --mode 3840x2160 --rate 50.00 --primary --output eDP-1 --mode 1920x1080 --rate 50.00 --pos 3840x540 --noprimary'
-alias k='sudo microk8s kubectl'
-alias kall='sudo microk8s kubectl get all --all-namespaces'
-alias kapply='sudo microk8s kubectl apply -f'
-alias kds='sudo microk8s kubectl delete service'
-alias kdbsecret="sudo microk8s kubectl describe secret -n kube-system microk8s-dashboard-token"
-alias kdbportforward="sudo microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --address 0.0.0.0"
-alias ll='ls -lah --group-directories-first'

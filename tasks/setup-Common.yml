@@ -331,6 +331,11 @@
 - name: Configuring all the commands that we want in our Workstation
   tags: custom_commands
   block:
+    - name: Setting the correct interpreter of python 
+      set_fact:
+        ansible_python_interpreter: "/usr/bin/python3"
+      tags: always
+
     - name: Copy file of function to work with the cloud (GCP, AWS, AZURE)
       template:
         src: ".cloud_functions.j2"
@@ -355,10 +360,18 @@
         group: "{{ default_group }}"
         mode: 0600
 
-    - name: Copy file of function generate_shadow_hash to the home directory
+    - name: Copy file with functions of keepassxc to the home directory
       template:
         src: ".keepassxc.j2"
         dest: "/home/{{ default_user }}/.keepassxc"
+        owner: "{{ default_user }}"
+        group: "{{ default_group }}"
+        mode: 0600
+
+    - name: Copy file of with all alias commands to the home directory
+      template:
+        src: ".alias.j2"
+        dest: "/home/{{ default_user }}/.alias"
         owner: "{{ default_user }}"
         group: "{{ default_group }}"
         mode: 0600
@@ -372,6 +385,7 @@
           [ -f ~/.cloud_functions ] && . ~/.cloud_functions
           [ -f ~/.generate_shadow_hash ] && . ~/.generate_shadow_hash
           [ -f ~/.other_functions ] && . ~/.other_functions
+          [ -f ~/.alias ] && . ~/.alias
           [ -f ~/.keepassxc ] && . ~/.keepassxc
 
 - name: Configuring all the things to dnsmasq

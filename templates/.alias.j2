@@ -1,0 +1,120 @@
+# ALIAS 
+alias freemem='sudo /sbin/sysctl -w vm.drop_caches=3'
+alias enter_matrix='echo -e "\e[32m"; while :; do for i in {1..16}; do r="$(($RANDOM % 2))"; if [[ $(($RANDOM % 5)) == 1 ]]; then if [[ $(($RANDOM % 4)) == 1 ]]; then v+="\e[1m $r   "; else v+="\e[2m $r   "; fi; else v+="     "; fi; done; echo -e "$v"; v=""; done'
+alias netscan='sudo nmap -sn -PO --script nbstat.nse '
+alias hwinfocustom='sudo hwinfo --bios | grep -C 3 GL752VW'
+alias publicip='curl https://ipconfig.sh'
+# GIT_OR_HUB 
+if which hub &>/dev/null; then
+  alias git=hub
+fi
+# GIT COMMANDS
+alias commit='git commit -a --allow-empty-message'
+# FABRIC COMMANDS
+alias fab-start-local='fab -f deploy/fabfile.py start:local'
+alias fab-play-local='fab -f deploy/fabfile.py play:local'
+alias fab-stop-local='fab -f deploy/fabfile.py stop:local'
+alias fab-restart-local='fab -f deploy/fabfile.py restart:local'
+alias fab-remove-local='fab -f deploy/fabfile.py remove:local'
+alias fab-tests-app-local='fab -f deploy/fabfile.py tests_app:local'
+alias fab-start-pro='fab -f deploy/fabfile.py start:prolocal'
+alias fab-play-pro='fab -f deploy/fabfile.py play:prolocal'
+alias fab-stop-pro='fab -f deploy/fabfile.py stop:prolocal'
+alias fab-restart-pro='fab -f deploy/fabfile.py restart:prolocal'
+alias fab-remove-pro='fab -f deploy/fabfile.py remove:prolocal'
+alias fab-tests-app-pro='fab -f deploy/fabfile.py tests_app:prolocal'
+alias fab-start-remote='fab -f deploy/fabfile.py start:remote'
+alias fab-play-remote='fab -f deploy/fabfile.py play:remote'
+alias fab-stop-remote='fab -f deploy/fabfile.py stop:remote'
+alias fab-restart-remote='fab -f deploy/fabfile.py restart:remote'
+alias fab-remove-remote='fab -f deploy/fabfile.py remove:remote'
+alias fab-tests-app-remote='fab -f deploy/fabfile.py tests_app:remote'
+# AUTOCOLOR 
+alias ls='ls --color=auto'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+# MODIFIED COMMANDS 
+alias ..='cd ..'
+alias df='df -Th'
+alias diff='colordiff'              # requires colordiff package
+alias du='du -c -h'
+alias free='free -m'                # show sizes in MB
+alias nano='nano -l $1'
+alias grep='grep --color=auto'
+alias grep='grep --color=tty -d skip'
+alias mkdir='mkdir -p -v'
+alias more='less'
+alias rm='rm -i'
+#alias ping='ping -c 5'
+# PRIVILEGED ACCESS 
+if ! $_isroot; then
+  alias sudo='sudo '
+  alias scat='sudo cat'
+  alias snano='sudo nano '
+  alias svim='sudo vim'
+  alias root='sudo su'
+  alias reboot='sudo reboot'
+  alias halt='sudo halt'
+  alias buscar='sudo find / -name '
+fi
+# SSH 
+alias conectar='ssh -i /home/usuario/.ssh/id_rsa '
+alias connwos='ssh -i /home/usuario/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null '
+alias testing='ssh -i /home/usuario/.ssh/id_rsa_deploying -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null '
+alias asa='ssh -o KexAlgorithms=diffie-hellman-group1-sha1 carlos.delatorre@vcomm.eu'
+alias asdm='java -jar ~/Programas/ASDMCisco/asdm-launcher.jar'
+alias veridata='ssh -i /home/usuario/.ssh/id_rsa_veridata upc@fycma.vcomm.es -X -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+alias wikiovh='ssh upc@wiki.veridata.es -X -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+# MULTIMEDIA 
+if which get_flash_videos &>/dev/null; then
+  alias gfv='get_flash_videos -r 720p --subtitles'
+fi
+alias brillo_opciones='xrandr | grep " connected" | cut -f1 -d " "'
+alias brillo_normal='xrandr --output HDMI-2 --brightness 0.7 '
+alias brillo_peliculas='xrandr --output HDMI-2 --brightness 1.5 '
+# MATLAB 
+alias matlab='LD_PRELOAD=/usr/lib64/libstdc++.so.6 /usr/local/MATLAB/R2017a/bin/matlab -desktop'
+# DOCKER 
+alias dockerui='sudo docker container restart dockerui'
+# LS 
+alias ls='ls -hF --color=auto'
+alias lr='ls -R' # recursive ls
+alias ll='ls -lah --group-directories-first'
+alias la='ll -A'
+alias lm='la | less'
+# GOOGLE COMMANDS
+alias show_cloud_deleted_projects='gcloud projects list --filter="lifecycleState:DELETE_REQUESTED"'
+alias show_local_projects='gcloud config configurations list'
+alias show_cloud_projects='gcloud projects list'
+alias show_cloud_id_base_project='gcloud projects list --filter="name:$GCLOUD_BASE_PROJECT" --format="value(PROJECT_NUMBER)"'
+alias show_cloud_organisations='gcloud organizations list'
+alias show_cloud_id_organisation='gcloud organizations list --filter="display_name:$GCLOUD_ORGANIZATION" --format="value(ID)"'
+alias set_account_with_root_permissions='gcloud config configurations activate $(gcloud config configurations list --filter="ACCOUNT:admin@$GCLOUD_ORGANIZATION" --format="value(name)")'
+alias set_account_with_user_permissions='gcloud config configurations activate $(gcloud config configurations list --filter="ACCOUNT:terraform" --format="value(name)")'
+# KUBECTL
+alias kall='kubectl get all --all-namespaces'
+alias kpods='kubectl get pods --all-namespaces -owide'
+alias ksrv='kubectl get services --all-namespaces -owide'
+# MICROK8S 
+if which microk8s &>/dev/null; then
+  alias k='sudo microk8s kubectl'
+  alias kall='sudo microk8s kubectl get all --all-namespaces'
+  alias kpods='sudo microk8s kubectl get pods --all-namespaces'
+  alias ksrvs='sudo microk8s kubectl get services --all-namespaces'
+  alias kapply='sudo microk8s kubectl apply -f'
+  alias kds='sudo microk8s kubectl delete service'
+  alias kdbsecret="sudo microk8s kubectl describe secret -n kube-system microk8s-dashboard-token"
+  alias kdbportforward="sudo microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443 --address 0.0.0.0"
+fi
+# OTHERS 
+# We will see the cotizations of Bitcoins
+alias gdif='git --no-pager diff'
+alias gstatusrecursive='for repo in $(find . -maxdepth 2 -mindepth 2 -type d); do cd $repo; git status; cd ../../; done'
+alias show_files_changed='echo "git diff --name-only HEAD^"; date; git diff --name-only HEAD^'
+alias show_files_last_commit='echo "git diff --name-only HEAD^.."; date; git diff --name-only HEAD^..'
+alias connect='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/usuario/.ssh/id_rsa '
+alias showpass='gpg2 --decrypt $1 2>/dev/null'
+alias config_monitor='xrandr --output DP-1 --mode 3840x2160 --rate 50.00 --primary --output eDP-1 --mode 1920x1080 --rate 50.00 --pos 3840x540 --noprimary'
