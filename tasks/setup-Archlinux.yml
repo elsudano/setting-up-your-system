@@ -35,8 +35,7 @@
     - name: Create a .kube folder
       file:
         dest: "/home/{{ default_user }}/.kube/"
-        state: present
-        mode: directory
+        state: directory
 
     - name: Ensure that SnapD is available
       service:
