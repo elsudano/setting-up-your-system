@@ -17,13 +17,13 @@ Run the next command in your home:
 IMPORTANT: only execute this command the first time, this command is used only because its key pairs (public and private) are already generated in the machine that is being configured
 
 ```bash
-mkdir SCM; cd SCM; GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"; git clone 
+mkdir SCM; cd SCM; GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"; git clone https://github.com/elsudano/setting-up-your-system
 ```
 
 Prepare environment with the following command:
 
 ```bash
-cd configuring-my-laptop; chmod 0754 bootstrap.sh; ./bootstrap.sh
+cd setting-up-your-system; chmod 0754 bootstrap.sh; ./bootstrap.sh
 ```
 
 Delete the file `vault/Common.yml` and name `vault/Common.example` by the previous name, change the values of the variables by the correct data and save the file.
