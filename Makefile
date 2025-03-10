@@ -14,7 +14,7 @@ help:
 
 $(VIRTUALENV):
 	python$(PYTHON_VERSION) -m venv $(VIRTUALENV)
-	$(call virtualenv, $(VIRTUALENV), pip install --no-cache-dir --upgrade 'ansible' 'pip')
+	$(call virtualenv, $(VIRTUALENV), pip install --no-cache-dir --upgrade 'ansible' 'pip' 'passlib')
 
 ansible-check: $(VIRTUALENV) .requirements ## Perform an Ansible check
 	$(call virtualenv, $(VIRTUALENV), ansible-playbook -i $(INVENTORY) site.yml --diff --check $(EXTRA))
