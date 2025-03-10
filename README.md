@@ -50,10 +50,22 @@ touch $HOME/.ssh/id_rsa; chmod 0600 $HOME/.ssh/id_rsa; nano $HOME/.ssh/id_rsa
 
 Go to the root path of the project and run the differents targets in order, If you want see the different target in the Makefile only type `make`
 
-Run the next command for starting the check of installation and, if all correct in the test run the following command.
+Run the following command in order to download the Roles:
 
 ```bash
-make 02_ansible-run
+make 02_ansible-check
+```
+
+Run the next command in order to install the pre-requisites packages in your environment.
+
+```bash
+make 02_ansible-run EXTRA="-l local -t packages"
+```
+
+And finally run the following command in order to star with your configuration.
+
+```bash
+make 02_ansible-run EXTRA="-l local"
 ```
 
 In this point of the installation is necessary reboot the VM
