@@ -240,7 +240,7 @@
   block:
     - name: Setting the correct interpreter of python 
       set_fact:
-        ansible_python_interpreter: "/usr/bin/python"
+        ansible_python_interpreter: "virtualenv/bin/python"
       tags: always
 
     - name: Open requiered port in FirewallD
@@ -281,6 +281,7 @@
 
 - name: Setting all the things to connect remotelly by X11Vnc
   tags: remote_manager
+  when: '"WSL" not in ansible_kernel'
   block:
     - name: We have created the file with the service of X11Vnc
       template:
@@ -390,6 +391,7 @@
 
 - name: Configuring all the things to dnsmasq
   tags: dnsmasq
+  when: '"WSL" not in ansible_kernel'
   become: true
   block:
     - name: Populate service facts

@@ -23,6 +23,7 @@
   tags: packages
   block:
     - name: Add an Apt signing key, uses whichever key is at the URL
+      when: '"WSL" not in ansible_kernel'
       apt_key:
         url: "{{ item.repo_key }}"
         state: present
@@ -31,7 +32,8 @@
       when: item.repo_key | default('', true) | trim != ''
 
     - name: Set all the repositories that we need to install all the tools that we use.
-      apt_repository:
+      when: '"WSL" not in ansible_kernel'
+      ansible.builtin.apt_repository:
         repo: "{{ item.repo }}"
         state: "{{ item.state }}"
         mode: 0644
@@ -73,6 +75,7 @@
 
 - name: Setting all the things to Microk8s start automatically
   tags: microk8s
+  when: '"WSL" not in ansible_kernel and install_microk8s'
   block:
     - name: Ensure that Cluster Agent service is enabled and running
       service:

@@ -113,8 +113,8 @@ package_list:
     packages:
       - vim
 
-go_programs:
-  - github.com/goreleaser/goreleaser@latest
+# go_programs:
+#   - github.com/goreleaser/goreleaser@latest
 
 list_with_keys_to_load:
   - /home/usuario/.ssh/id_rsa

@@ -35,7 +35,7 @@ workstation_swapiness: false
 # We will need the content of our Public Key in order to use our SCM (Source Code Management)
 # @required
 workstation_public_key: |
-    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzPCohSh2ANgj2qcYxfHFpmBpRlczvZ4lSz/g+AVoo0vhQg9bW7EZ87UvrOTShOC/cCA01VeC5SAZfoHUvtEQFwWP0DcGG2HC5XnFbhnnMAAHvFKIG7bQRmWE7B7rIxv7WjieqjJ5cGBC2poWfr1rVvHTsh2tsWVNCUeGmLxzj6ciBJAIMk7ry47paQORyUJQJFhTEinDc7ROhmkXA3qKUPo5yfXJTxPYhh8BhVctrHrwoBYzjrkKbPpCjy2quQqU5l1oufQa8IKVvTyxu2L6ychFp0h2YONDXYFJxCIzSzYlQElXD4d6kVUUDdsp/yNXEFtGUgnE4fN2UzjHiezgl pepitogrillo148@hotmail.com
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTi10t3EIdAyR4eK47s0mQESJyHN2lORFZQxyPHydPhAF77hpLJuETVVv2N146iLpM5tNKMjBFD7jSsX5lZHQ5nczPuFPI59T6Sft9bEPbMq/c2gPCbzKd64xI6MYnFX5arVVFecXJbUI2eFmsq/wR/h4gHer8wLaw3tHeyaoQV0doghOIzKk4bfhnir6hv1Up1dvGV7wRB9CqztBGrRWqzwX39jh1p7nOLiKGoAp84gpXyzllezz1fPZ91y+pjDckLKJ76Xyi4fwm97JzL07S8Y4HV5rNoUcpiC4/ETq+FyXh8DTh8vbWJ3/OwNbZU6xIFfev8JMsISWPZeTE08IyJBj+O2iL8ZCLdf+R9KVt3t1qqpbduc31uI5s3D1vlFe6hmWE9p8NH8/nTLY5RM+mH8qB5LaW/yerEYKlt+jS7bjWdZiEh6q6GgrZf/8k8aOo8bXJZJzm+tS1P50dXnPrrxj7qTonpPkYSnfBCZf7Ie4+ijfFb3x+WF46V7Yqy29lfeJDGD/LTeBQbkB87SzujGsEYJKfP/CqGR4REjTWR9Vj62361Hk1+16Xa/MJpIBZMuUwVrj+oqsE8FNqdXq1omCNC8ZKzwygWe18J5CT+ZUX7hfcxPW/ixbomYwOJMCKA3yHBSY3Y0a/SEDZOEDq3RUPApXCnM/mnD+tPNqavw== usuario@T14-PF4F60DA
 
 # This is the file where we store the password for the user of X11VNC
 # @required
@@ -52,7 +52,6 @@ docker_users:
 # @required
 resolve_conf_file_options:
  - nameserver 127.0.0.1
- - search casa.local
  - options edns0 trust-ad
 
 # If we want to open a ports in our instance, we need put here 

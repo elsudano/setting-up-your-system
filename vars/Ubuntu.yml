@@ -1,4 +1,8 @@
 ---
+# We can manage which one of tools we want to install
+# @ required
+install_microk8s: false
+
 # We can use this variable in order to set all the repositories that we want
 # @required
 repo_list:
@@ -23,6 +27,7 @@ repo_list:
   - state: present
     repo: 'deb https://packages.cloud.google.com/apt cloud-sdk main'
     filename: 'google-sdk'
+    repo_key: 'https://packages.cloud.google.com/apt/doc/apt-key.gpg'
 
   - state: present
     repo: 'deb https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/ jammy main'
@@ -33,12 +38,15 @@ repo_list:
 package_list:
   - state: present
     packages:
+      - atop
+      - python3-passlib
       - apt-transport-https
       - apt-transport-s3
       - ca-certificates
       - curl
       - net-tools
       - git
+      - golang-go
       - gnupg2
       - jq
       - tree
@@ -48,13 +56,14 @@ package_list:
       - python3.10-venv
       - python3-firewall
       - firewalld
+      - x11vnc
   - state: absent
     packages:
       - muon
       - snapd
 
-go_programs:
-  - github.com/gopasspw/gopass@latest
+# go_programs:
+  # - github.com/gopasspw/gopass@latest
 
 list_with_keys_to_load:
   - ~/.ssh/id_rsa
