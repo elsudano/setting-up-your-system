@@ -1,3 +1,4 @@
+roles:
 - src: geerlingguy.ntp
   version: "2.3.1"
 
