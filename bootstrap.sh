@@ -5,7 +5,7 @@ echo "$(whoami) ALL=(ALL:ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$(whoami) 
 OS=$(hostnamectl | grep "Operating System:" | awk -F\  '{ print $3 }')
 
 if [ ! -f ~/.ssh/id_rsa ]; then
-    ssh-keygen -b 4096 -t rsa
+    ssh-keygen -b 4096 -t rsa -f ~/.ssh/id_rsa
     cat ~/.ssh/id_rsa.pub | tee -a ~/.ssh/authorized_keys > /dev/null
 fi
 # if [ ! -f ~/.ssh/id_ed25519 ]; then
