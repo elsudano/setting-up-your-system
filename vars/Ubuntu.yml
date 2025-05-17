@@ -7,31 +7,36 @@ install_microk8s: false
 # @required
 repo_list:
   - state: present
-    repo: 'deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main'
+    suites: [stable]
+    components: [main]
+    types: [deb]
+    repo: 'https://packages.microsoft.com/repos/vscode'
     filename: 'code-studio'
     repo_key: 'https://packages.microsoft.com/keys/microsoft.asc'
-
+    
   - state: present
-    repo: 'deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main'
-    filename: 'kubernetes'
-
-  - state: present
-    repo: 'deb [arch=amd64] https://apt.releases.hashicorp.com jammy main'
+    suites: [noble]
+    components: [main]
+    types: [deb]
+    repo: 'https://apt.releases.hashicorp.com'
     filename: 'hashicorp'
+    repo_key: 'https://apt.releases.hashicorp.com/gpg'
 
   - state: present
-    repo: 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main'
+    suites: [stable]
+    components: [main]
+    types: [deb]
+    repo: 'http://dl.google.com/linux/chrome/deb/'
     filename: 'google'
     repo_key: 'https://dl.google.com/linux/linux_signing_key.pub'
 
   - state: present
-    repo: 'deb https://packages.cloud.google.com/apt cloud-sdk main'
+    suites: [cloud-sdk]
+    components: [main]
+    types: [deb]
+    repo: 'https://packages.cloud.google.com/apt'
     filename: 'google-sdk'
     repo_key: 'https://packages.cloud.google.com/apt/doc/apt-key.gpg'
-
-  - state: present
-    repo: 'deb https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/ jammy main'
-    filename: 'mozilla'
 
 # With this variable we can install or remove all the applications that we have or we want in our Workstation
 # @required
@@ -39,7 +44,6 @@ package_list:
   - state: present
     packages:
       - atop
-      - python3-passlib
       - apt-transport-https
       - apt-transport-s3
       - ca-certificates
@@ -53,14 +57,16 @@ package_list:
       - dnsmasq
       - nano
       - make
-      - python3.10-venv
+      - python3-venv
       - python3-firewall
+      - python3-passlib
+      - python3-debian
       - firewalld
       - x11vnc
   - state: absent
     packages:
       - muon
-      - snapd
+#      - snapd
 
 # go_programs:
   # - github.com/gopasspw/gopass@latest
