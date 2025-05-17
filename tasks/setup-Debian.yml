@@ -6,6 +6,7 @@
     update_cache: yes
     autoremove: yes
   become: true
+  become_method: sudo
 
 - local_action: stat path=/etc/cloud/cloud.cfg
   register: config_file
@@ -22,24 +23,21 @@
   become: true
   tags: packages
   block:
-    - name: Add an Apt signing key, uses whichever key is at the URL
-      when: '"WSL" not in ansible_kernel'
-      apt_key:
-        url: "{{ item.repo_key }}"
-        state: present
-      with_items:
-        "{{ repo_list }}"
-      when: item.repo_key | default('', true) | trim != ''
-
+  
     - name: Set all the repositories that we need to install all the tools that we use.
-      when: '"WSL" not in ansible_kernel'
-      ansible.builtin.apt_repository:
-        repo: "{{ item.repo }}"
+      ansible.builtin.deb822_repository:
+        name: "{{ item.filename }}"
+        uris: "{{ item.repo }}"
+        signed_by: "{{ item.repo_key }}"
         state: "{{ item.state }}"
-        mode: 0644
-        filename: "{{ item.filename }}"
+        suites: "{{ item.suites }}"
+        types: "{{ item.types }}"
+        components: "{{ item.components }}"
+        architectures: amd64
+        enabled: true
       with_items:
         "{{ repo_list }}"
+      when: ("WSL" not in ansible_kernel) or (item.repo_key | default('', true) | trim != '')
 
     - name: Install and Remove the Custom Packages that we want
       apt:
