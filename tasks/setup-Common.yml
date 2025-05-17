@@ -112,7 +112,7 @@
 
     - name: We are creating a new file in order to allow run commands in sudo mode at the user
       copy:
-        content: "{{ default_user }} ALL=(ALL) NOPASSWD: ALL"
+        content: "{{ default_user }} ALL=(ALL:ALL) NOPASSWD:ALL"
         dest: "/etc/sudoers.d/{{ default_user }}"
         owner: root
         group: root
@@ -243,30 +243,30 @@
         ansible_python_interpreter: "virtualenv/bin/python"
       tags: always
 
-    - name: Open requiered port in FirewallD
-      ansible.posix.firewalld:
-        port: "{{ item }}"
-        permanent: true
-        state: enabled
-      register: change_firewall_config
-      when: fw_ports is defined
-      with_items: "{{ fw_ports }}"
+#    - name: Open requiered port in FirewallD
+#      ansible.posix.firewalld:
+#        port: "{{ item }}"
+#        permanent: true
+#        state: enabled
+#      register: change_firewall_config
+#      when: fw_ports is defined
+#      with_items: "{{ fw_ports }}"
 
-    - name: Enable some protocols in Firewalld
-      ansible.posix.firewalld:
-        rich_rule: "rule protocol value={{ item }} accept"
-        permanent: true
-        state: enabled
-      register: change_firewall_config
-      when: fw_proto is defined
-      with_items: "{{ fw_proto }}"
+#    - name: Enable some protocols in Firewalld
+#      ansible.posix.firewalld:
+#        rich_rule: "rule protocol value={{ item }} accept"
+#        permanent: true
+#        state: enabled
+#      register: change_firewall_config
+#      when: fw_proto is defined
+#      with_items: "{{ fw_proto }}"
 
     - name: Reload and restart service FirewallD
       ansible.builtin.systemd:
         name: firewalld
         state: restarted
         enabled: true
-      when: change_firewall_config is changed
+#      when: change_firewall_config is changed
 
     - name: Disable IPv6 for all interfaces
       sysctl:
@@ -400,15 +400,15 @@
     - name: Disabled the systemd-resolv.service
       service:
         name: systemd-resolved.service
-        enabled: false
+        enabled: yes
         daemon_reload: yes
-        state: stopped
-      when: "'systemd-resolved' in services"
+        state: started
+      when: "'systemd-resolved.service' in services"
 
     - name: Enabled the dnsmasq.service
       service:
         name: dnsmasq.service
-        enabled: yes
+        enabled: false
         daemon_reload: yes
-        state: started
+        state: stopped
       when: "'dnsmasq' in services"
