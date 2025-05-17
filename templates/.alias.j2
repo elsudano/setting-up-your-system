@@ -116,5 +116,6 @@ alias gstatusrecursive='for repo in $(find . -maxdepth 2 -mindepth 2 -type d); d
 alias show_files_changed='echo "git diff --name-only HEAD^"; date; git diff --name-only HEAD^'
 alias show_files_last_commit='echo "git diff --name-only HEAD^.."; date; git diff --name-only HEAD^..'
 alias connect='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/usuario/.ssh/id_rsa '
+alias publicip='curl http://eth0.me/'
 alias showpass='gpg2 --decrypt $1 2>/dev/null'
 alias config_monitor='xrandr --output DP-1 --mode 3840x2160 --rate 50.00 --primary --output eDP-1 --mode 1920x1080 --rate 50.00 --pos 3840x540 --noprimary'
