@@ -57,11 +57,13 @@ package_list:
       - dnsmasq
       - nano
       - make
+      - terraform
       - python3-venv
       - python3-firewall
       - python3-passlib
       - python3-debian
       - firewalld
+      - nfs-common
       - x11vnc
   - state: absent
     packages:

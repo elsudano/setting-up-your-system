@@ -45,6 +45,7 @@ package_list:
       - atop
       - kubectl
       - terraform
+      - nfs-common
       - firefox
       - thunderbird
       - google-chrome-stable
