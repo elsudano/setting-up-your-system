@@ -25,10 +25,10 @@
         - 'vault/{{ ansible_facts["distribution"] }}'
 
   roles:
-    - { role: willshersystems.sshd, become: true, when: ansible_facts["distribution"] in distributions }
-    - { role: geerlingguy.ntp, become: true, when: ansible_facts["distribution"] in distributions }
-    - { role: geerlingguy.pip, become: true, when: ansible_facts["distribution"] in distributions }
-    - { role: geerlingguy.docker, become: true, tags: docker, when: ansible_facts["distribution"] in distributions }
+    - { role: willshersystems.sshd, become: true, when: 'ansible_facts["distribution"] in distributions' }
+    - { role: geerlingguy.ntp, become: true, when: 'ansible_facts["distribution"] in distributions' }
+    - { role: geerlingguy.pip, become: true, when: 'ansible_facts["distribution"] in distributions' }
+    - { role: geerlingguy.docker, become: true, tags: docker, when: 'ansible_facts["distribution"] in distributions' }
 
   tasks:
     - name: Include all the common tasks
