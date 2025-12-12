@@ -10,6 +10,8 @@ remote:
       ansible_host: server.casa.local
       short_host: server
       name_of_workstation: server
+k8s:
+  hosts:
     master:
       ansible_ssh_user: usuario
       ansible_host: master.casa.local
@@ -25,3 +27,8 @@ remote:
       ansible_host: node2.casa.local
       short_host: node2
       name_of_workstation: node2
+    node3:
+      ansible_ssh_user: usuario
+      ansible_host: node3.casa.local
+      short_host: node3
+      name_of_workstation: node3
