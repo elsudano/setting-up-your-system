@@ -1,5 +1,6 @@
 ---
 - name: Upgrade all packages to the latest version (Debian)
+  tags: packages
   apt:
     upgrade: true
     state: latest
