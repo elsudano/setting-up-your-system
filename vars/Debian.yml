@@ -67,6 +67,3 @@ package_list:
 
 go_programs:
   - github.com/gopasspw/gopass@latest
-
-list_with_keys_to_load:
-  - ~/.ssh/id_rsa

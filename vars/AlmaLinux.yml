@@ -115,6 +115,3 @@ package_list:
 
 # go_programs:
 #   - github.com/goreleaser/goreleaser@latest
-
-list_with_keys_to_load:
-  - /home/usuario/.ssh/id_rsa
