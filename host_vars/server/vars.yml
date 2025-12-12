@@ -83,3 +83,50 @@ fw_protos:
 # git_protol:
 #  original: "git@gitlab.sudano.net:"
 #  replaceby: "https://gitlab.sudano.net/"
+
+# We can manage which one of tools we want to install
+# @ required
+install_microk8s: false
+
+# We can use this variable in order to set all the repositories that we want
+# @required
+repo_list:
+  - state: present
+    suites: [stable]
+    components: [main]
+    types: [deb]
+    repo: 'http://dl.google.com/linux/chrome/deb/'
+    filename: 'google'
+    repo_key: 'https://dl.google.com/linux/linux_signing_key.pub'
+
+# With this variable we can install or remove all the applications that we have or we want in our Workstation
+# @required
+package_list:
+  - state: present
+    packages:
+      - atop
+      - apt-transport-https
+      - apt-transport-s3
+      - ca-certificates
+      - curl
+      - net-tools
+      - git
+      - gnupg2
+      - jq
+      - tree
+      - dnsmasq
+      - nano
+      - make
+      - python3-venv
+      - python3-firewall
+      - python3-passlib
+      - python3-debian
+      - firewalld
+  - state: absent
+    packages:
+      - muon
+      - snapd
+      - nfs-common
+
+go_programs:
+  # - github.com/gopasspw/gopass@latest

@@ -248,7 +248,7 @@
   block:
     - name: Setting the correct interpreter of python
       set_fact:
-        ansible_python_interpreter: "virtualenv/bin/python"
+        ansible_python_interpreter: "/bin/python3"
       tags: always
 
     - name: Listing open ports
