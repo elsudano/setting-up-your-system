@@ -17,18 +17,18 @@
         - Common
         - vault/Common
 
-    - name: "Include vault/{{ ansible_distribution }}.yml and {{ ansible_distribution }}.yml variables in order to complete the tasks"
+    - name: 'Include vault/{{ ansible_facts["distribution"] }}.yml and {{ ansible_facts["distribution"] }}.yml variables in order to complete the tasks'
       tags: always
       include_vars: "{{ item }}.yml"
       with_items:
-        - "{{ ansible_distribution }}"
-        - "vault/{{ ansible_distribution }}"
+        - '{{ ansible_facts["distribution"] }}'
+        - 'vault/{{ ansible_facts["distribution"] }}'
 
   roles:
-    - { role: willshersystems.sshd, become: true, when: ansible_distribution in distributions }
-    - { role: geerlingguy.ntp, become: true, when: ansible_distribution in distributions }
-    - { role: geerlingguy.pip, become: true, when: ansible_distribution in distributions }
-    - { role: geerlingguy.docker, become: true, when: ansible_distribution in distributions, tags: docker }
+    - { role: willshersystems.sshd, become: true, when: ansible_facts["distribution"] in distributions }
+    - { role: geerlingguy.ntp, become: true, when: ansible_facts["distribution"] in distributions }
+    - { role: geerlingguy.pip, become: true, when: ansible_facts["distribution"] in distributions }
+    - { role: geerlingguy.docker, become: true, tags: docker, when: ansible_facts["distribution"] in distributions }
 
   tasks:
     - name: Include all the common tasks
@@ -38,27 +38,27 @@
     - name: Include all the Debian tasks
       tags: always
       include_tasks: tasks/setup-Debian.yml
-      when: ansible_distribution == 'Debian'
+      when: ansible_facts["distribution"] == 'Debian'
 
     - name: Include all the Ubuntu tasks
       tags: always
       include_tasks: tasks/setup-Debian.yml
-      when: ansible_distribution == 'Ubuntu'
+      when: ansible_facts["distribution"] == 'Ubuntu'
 
     - name: Include all the Archlinux tasks
       tags: always
       include_tasks: tasks/setup-Archlinux.yml
-      when: ansible_distribution == 'Archlinux'
+      when: ansible_facts["distribution"] == 'Archlinux'
 
     - name: Include all the AlmaLinux tasks
       tags: always
       include_tasks: tasks/setup-AlmaLinux.yml
-      when: ansible_distribution == 'AlmaLinux'
+      when: ansible_facts["distribution"] == 'AlmaLinux'
 
     - name: Include all the RedHat tasks
       tags: always
       include_tasks: tasks/setup-RedHat.yml
-      when: ansible_distribution == 'RedHat'
+      when: ansible_facts["distribution"] == 'RedHat'
 
     - name: Include all the Post instalation tasks
       tags: always
