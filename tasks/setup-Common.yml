@@ -206,12 +206,14 @@
         dest: /etc/ssh/sshd_config
         regexp: "^ClientAliveInterval"
         line: "ClientAliveInterval 30"
+      notify: Restart sshd
 
     - name: Ensure to terminate SSH sessions with unresponsive clients
       lineinfile:
         dest: /etc/ssh/sshd_config
         regexp: "^ClientAliveCountMax"
         line: "ClientAliveCountMax 120"
+      notify: Restart sshd
 
 - name: All releated with SCM and GPG
   tags: gpg
@@ -249,30 +251,80 @@
         ansible_python_interpreter: "virtualenv/bin/python"
       tags: always
 
+    - name: Listing open ports
+      ansible.builtin.command: firewall-cmd --list-ports --zone public
+      register: fw_ports_open
+
+    - name: Listing enable services
+      ansible.builtin.command: firewall-cmd --list-services --zone public
+      register: fw_services_enable
+
+    - name: Listing enable protocols
+      ansible.builtin.command: firewall-cmd --list-protocols --zone public
+      register: fw_protocols_enable
+
     - name: Open requiered port in FirewallD
       ansible.posix.firewalld:
+        zone: "public"
         port: "{{ item }}"
         permanent: true
         state: enabled
-      register: change_firewall_config
+      notify: Restart firewalld
       when: fw_ports is defined
       with_items: "{{ fw_ports }}"
 
-    - name: Enable some protocols in Firewalld
+    - name: Close all the ports that aren't in fw_ports variable
       ansible.posix.firewalld:
-        rich_rule: "rule protocol value={{ item }} accept"
+        zone: "public"
+        port: "{{ item }}"
+        permanent: true
+        state: disabled
+        immediate: true
+      notify: Restart firewalld
+      when: fw_ports is defined and item not in fw_ports
+      with_items: "{{ fw_ports_open.stdout.split() }}"
+
+    - name: Enable some services in Firewalld
+      ansible.posix.firewalld:
+        zone: "public"
+        service: "{{ item }}"
         permanent: true
         state: enabled
-      register: change_firewall_config
-      when: fw_proto is defined
-      with_items: "{{ fw_proto }}"
+      notify: Restart firewalld
+      when: fw_services is defined
+      with_items: "{{ fw_services }}"
 
-    - name: Reload and restart service FirewallD
-      ansible.builtin.systemd:
-        name: firewalld
-        state: restarted
-        enabled: true
-      when: change_firewall_config is changed
+    - name: Disable some services in Firewalld
+      ansible.posix.firewalld:
+        zone: "public"
+        service: "{{ item }}"
+        permanent: true
+        state: disabled
+        immediate: true
+      notify: Restart firewalld
+      when: fw_services is defined and item not in fw_services
+      with_items: "{{ fw_services_enable.stdout.split() }}"
+
+    - name: Enable some protocols in Firewalld
+      ansible.posix.firewalld:
+        zone: "public"
+        protocol: "{{ item }}"
+        permanent: true
+        state: enabled
+      notify: Restart firewalld
+      when: fw_protos is defined
+      with_items: "{{ fw_protos }}"
+
+    - name: Disable some protocols in Firewalld
+      ansible.posix.firewalld:
+        zone: "public"
+        protocol: "{{ item }}"
+        permanent: true
+        state: disabled
+        immediate: true
+      notify: Restart firewalld
+      when: fw_protos is defined and item not in fw_protos
+      with_items: "{{ fw_protocols_enable.stdout.split() }}"
 
     - name: Disable IPv6 for all interfaces
       sysctl:
