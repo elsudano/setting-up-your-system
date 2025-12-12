@@ -35,7 +35,7 @@ workstation_swapiness: false
 # We will need the content of our Public Key in order to use our SCM (Source Code Management)
 # @required
 workstation_public_key: |
-  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzPCohSh2ANgj2qcYxfHFpmBpRlczvZ4lSz/g+AVoo0vhQg9bW7EZ87UvrOTShOC/cCA01VeC5SAZfoHUvtEQFwWP0DcGG2HC5XnFbhnnMAAHvFKIG7bQRmWE7B7rIxv7WjieqjJ5cGBC2poWfr1rVvHTsh2tsWVNCUeGmLxzj6ciBJAIMk7ry47paQORyUJQJFhTEinDc7ROhmkXA3qKUPo5yfXJTxPYhh8BhVctrHrwoBYzjrkKbPpCjy2quQqU5l1oufQa8IKVvTyxu2L6ychFp0h2YONDXYFJxCIzSzYlQElXD4d6kVUUDdsp/yNXEFtGUgnE4fN2UzjHiezgl pepitogrillo148@hotmail.com
+  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCwOHvXgGR4VUPWCJCufTVrL9o1+V5d/5P0Gp1yxjtVe3gJla9uKKySkY80biW0M2WOCx9dVti2HRfsRcs0OUU2RVOYFOevCA9gB9+u0WYm9LsCff3H5AE0tYkHNcTxJ68k4zA42XTAIDqfcn3L7qgNNilBNYY8bDYpZfqDYIIAidHTa/7YV92s1/8MwhhLuQYlxeWv95Up5zn6dpcUsWvLwYTYH/PCnNWdN/1pzFxtWQvupxwlG3Ny8IyKq9gQbFEDKMyJnp5+qM/R3e8quh1CT77sta0oNE4D3w9nI85d7bDLgT/ExNhbKkADBdh2G0x+LMb8Nwrxtp/zlscWGj6uW3S6TXiQb5Q39ghAypMakSDUf/S3eJzXh0ofKCXVm0CRrdS+gE8x8Qa85rUAl6wBwyngJvd7wKn9/7WYHQchq+vrP9tkFVDGBmgBQcWQTorqeqC3+QRWuPvC5nrY6DY491sn4ddRmMDqWwK29Ni38PPSnazu1WyKJ/zLQ3w4MKL6MuhBQJZmuS8oNbHOoD54ET42SGa2Jcm4lTE8ZzDAx4XPAz8CluyPLCNhoEvua+Mv8QpWWKCcGsM5keLZa7/OjKPmguLC3ddgnrhlBotZXlY4ykeyXNLDZPbDyTeq+JwSjJNKLdU1KD12bGRvHniOWy6gr2T7DcIgmsLJ4qSCAw== the.live.traveling@gmail.com
 
 # This is the file where we store the password for the user of X11VNC
 # @required
@@ -59,19 +59,19 @@ resolve_conf_file_options:
 # @optional
 fw_ports:
   - 22/tcp
-  - 5432/tcp
-  - 5601/tcp
-  - 5900/tcp
-  - 9200/tcp
-  - 16443/tcp
-  - 24231/tcp
-  - 25000/tcp
-  - 19001/tcp
+#  - 1000/tcp
+
+# If we want to open a service in our instance, we need put here 
+# which service we need
+# @optional
+fw_services:
+  - ssh
 
 # If we want to open a protocol in our instance, we need put here 
 # which protocols we need
 # @optional
-# fw_proto:
+fw_protos:
+  - tcp
 
 # If we want change the protocol with the git in order to connect at our 
 # own git server we can use this configuration
