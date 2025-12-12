@@ -4,6 +4,7 @@ PYTHON_VERSION = 3
 VIRTUALENV = virtualenv
 VAULT_ANSIBLE = vault
 NUM = $(shell ls -A roles/ | wc -l)
+ANSIBLE_VAULT_FILES != find . -type f -name vault -not -path '*/*.template/*'
 
 .PHONY: help
 help:
@@ -27,9 +28,11 @@ molecule-check: $(VIRTUALENV) ## You can check if the role is ok
 
 encrypt: ## Encrypt files for uploading to repository
 	$(call virtualenv, $(VIRTUALENV), ansible-vault encrypt vault/*.yml > /dev/null)
+	$(call virtualenv, $(VIRTUALENV), ansible-vault encrypt $(ANSIBLE_VAULT_FILES) > /dev/null)
 
 decrypt: ## Decrypt files for working with them
 	$(call virtualenv, $(VIRTUALENV), ansible-vault decrypt vault/*.yml > /dev/null)
+	$(call virtualenv, $(VIRTUALENV), ansible-vault decrypt $(ANSIBLE_VAULT_FILES) > /dev/null)
 
 .PHONY: 06_upload
 upload: 04_encrypt .upload 05_decrypt ## Encrypt vault files and add, commit the files with message, for e.g. upload MESSAGE="Add files"

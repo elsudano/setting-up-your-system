@@ -105,9 +105,9 @@
         marker: "# {mark} BASIC CONF"
         state: present
         block: |
-          LC_ALL=es_ES.UTF-8
-          LANGUAGE=es_ES
-          LANG=es_ES.UTF-8
+          LC_ALL={{ config_system_locale }}
+          LANGUAGE={{ config_system_language }}
+          LANG={{ config_system_locale }}
 
     - name: We are creating a new file in order to allow run commands in sudo mode at the user
       copy:
