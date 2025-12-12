@@ -64,6 +64,7 @@ fi
 alias conectar='ssh -i /home/usuario/.ssh/id_rsa '
 alias connwos='ssh -i /home/usuario/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null '
 alias testing='ssh -i /home/usuario/.ssh/id_rsa_deploying -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null '
+alias usage='du -sk * | sort -n | perl -ne '\''($s,$f)=split(m{\t});for (qw(K M G)) {if($s<1024) {printf("%.1f",$s);print "$_\t$f"; last};$s=$s/1024}'\'
 alias asa='ssh -o KexAlgorithms=diffie-hellman-group1-sha1 carlos.delatorre@vcomm.eu'
 alias asdm='java -jar ~/Programas/ASDMCisco/asdm-launcher.jar'
 alias veridata='ssh -i /home/usuario/.ssh/id_rsa_veridata upc@fycma.vcomm.es -X -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
