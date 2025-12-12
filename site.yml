@@ -66,5 +66,4 @@
 
   handlers:
     - name: Include all the Handlers tasks
-      tags: always
-      include_tasks: handlers/main.yml
+      import_tasks: handlers/main.yml
