@@ -1,9 +1,8 @@
- 
 ---
 - name: Change the name of VM (Debian)
   hostname:
     name: "{{ name_of_workstation }}"
-  when: '"WSL" not in ansible_kernel'
+  when: '"WSL" not in ansible_facts["kernel"]'
 
 - name: Change a usuario password
   tags: always
@@ -97,7 +96,7 @@
         dest: "/home/{{ default_user }}/.bashrc"
         regexp: "^eval \"$(ssh-agent -s)\""
         line: "ssh-add {{ item }}"
-      with_items: 
+      with_items:
         "{{ list_with_keys_to_load }}"
 
     - name: Adding basic configuration to .bashrc (Debian)
@@ -218,28 +217,34 @@
   tags: gpg
   become: false
   block:
+    - local_action: stat path=/usr/bin/gpg2
+      register: gpg_binary
+
     - name: Configure gpgsing for Git configuration
       git_config:
         scope: global
         name: commit.gpgsign
         value: true
+      when: gpg_binary.stat.exists
 
     - name: Configure gpg program for Git configuration
       git_config:
         scope: global
         name: gpg.program
         value: gpg2
+      when: gpg_binary.stat.exists
 
     - name: Configure your ID gpg Key for Git configuration
       git_config:
         scope: global
         name: user.signingkey
         value: "{{ workstation_id_gpg_key }}"
+      when: gpg_binary.stat.exists
 
 - name: Setting all the things to connect from out of the instance
   tags: firewalld
   block:
-    - name: Setting the correct interpreter of python 
+    - name: Setting the correct interpreter of python
       set_fact:
         ansible_python_interpreter: "virtualenv/bin/python"
       tags: always
@@ -282,8 +287,11 @@
 
 - name: Setting all the things to connect remotelly by X11Vnc
   tags: remote_manager
-  when: '"WSL" not in ansible_kernel'
+  when: '"WSL" not in ansible_facts["kernel"]'
   block:
+    - local_action: stat path=/usr/bin/x11vnc
+      register: x11vnc_binary
+
     - name: We have created the file with the service of X11Vnc
       template:
         src: "x11vnc.service.j2"
@@ -294,12 +302,13 @@
 
     - name: We going to create a VNC folder to save the files
       file:
-        path: "{{ lookup('env','HOME') }}/.vnc/"
+        path: '{{ lookup("env","HOME") }}/.vnc/'
         state: directory
         mode: 0755
 
     - name: Setting the password for X11Vnc
       command: x11vnc -storepasswd "{{ workstation_password }}" {{ x11vnc_passwd_file }}
+      when: x11vnc_binary.stat.exists
 
     - name: Ensure that X11Vnc service is enabled and running
       service:
@@ -307,7 +316,7 @@
         enabled: yes
         daemon_reload: yes
         state: started
-      when: ansible_check_mode == false
+      when: ansible_check_mode == false and x11vnc_binary.stat.exists
 
 - name: Setting all the configurations for GO-LANG
   tags: bash_config
@@ -324,16 +333,19 @@
             export PATH=$PATH:$GOBIN
           fi
 
+    - local_action: stat path=$GOBIN/go
+      register: go_binary
+
     - name: Install all programs by go.
       command: "go install {{ item }}"
       with_items:
         "{{ go_programs }}"
-      when: ansible_check_mode == false and go_programs is defined
+      when: ansible_check_mode == false and go_binary.stat.exists and go_programs is defined
 
 - name: Configuring all the commands that we want in our Workstation
   tags: custom_commands
   block:
-    - name: Setting the correct interpreter of python 
+    - name: Setting the correct interpreter of python
       set_fact:
         ansible_python_interpreter: "/usr/bin/python3"
       tags: always
@@ -387,12 +399,12 @@
           [ -f ~/.cloud_functions ] && . ~/.cloud_functions
           [ -f ~/.generate_shadow_hash ] && . ~/.generate_shadow_hash
           [ -f ~/.other_functions ] && . ~/.other_functions
-          [ -f ~/.alias ] && . ~/.alias
           [ -f ~/.keepassxc ] && . ~/.keepassxc
+          [ -f ~/.alias ] && . ~/.alias
 
 - name: Configuring all the things to dnsmasq
   tags: dnsmasq
-  when: '"WSL" not in ansible_kernel'
+  when: '"WSL" not in ansible_facts["kernel"]'
   become: true
   block:
     - name: Populate service facts
@@ -404,7 +416,7 @@
         enabled: yes
         daemon_reload: yes
         state: started
-      when: "'systemd-resolved.service' in services"
+      when: '"systemd-resolved.service" in ansible_facts["services"]'
 
     - name: Enabled the dnsmasq.service
       service:
@@ -412,4 +424,4 @@
         enabled: false
         daemon_reload: yes
         state: stopped
-      when: "'dnsmasq' in services"
+      when: '"dnsmasq" in ansible_facts["services"]'

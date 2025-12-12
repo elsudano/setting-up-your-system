@@ -17,13 +17,13 @@
     regexp: '^preserve_hostname:'
     line: 'preserve_hostname: true'
   become: true
-  when: config_file.stat.exists and ('WSL' not in ansible_kernel)
+  when: config_file.stat.exists and ('WSL' not in ansible_facts["kernel"])
 
 - name: All related to install packages
   become: true
   tags: packages
   block:
-  
+
     - name: Set all the repositories that we need to install all the tools that we use.
       ansible.builtin.deb822_repository:
         name: "{{ item.filename }}"
@@ -37,7 +37,7 @@
         enabled: true
       with_items:
         "{{ repo_list }}"
-      when: ("WSL" not in ansible_kernel) or (item.repo_key | default('', true) | trim != '')
+      when: ("WSL" not in ansible_facts["kernel"]) or (item.repo_key | default('', true) | trim != '')
 
     - name: Install and Remove the Custom Packages that we want
       apt:
@@ -73,7 +73,7 @@
 
 - name: Setting all the things to Microk8s start automatically
   tags: microk8s
-  when: '"WSL" not in ansible_kernel and install_microk8s'
+  when: '"WSL" not in ansible_facts["kernel"] and install_microk8s and ansible_facts["check_mode"] == false'
   block:
     - name: Ensure that Cluster Agent service is enabled and running
       service:
@@ -81,7 +81,6 @@
         enabled: yes
         daemon_reload: yes
         state: started
-      when: ansible_check_mode == false
 
     - name: Ensure that Containerd service is enabled and running
       service:
@@ -89,7 +88,6 @@
         enabled: yes
         daemon_reload: yes
         state: started
-      when: ansible_check_mode == false
 
     - name: Ensure that K8-Dqlite service is enabled and running
       service:
@@ -97,7 +95,6 @@
         enabled: yes
         daemon_reload: yes
         state: started
-      when: ansible_check_mode == false
 
     - name: Ensure that Kubelite service is enabled and running
       service:
@@ -105,7 +102,6 @@
         enabled: yes
         daemon_reload: yes
         state: started
-      when: ansible_check_mode == false
 
     - name: Ensure that ApiServer-Kicker service is enabled and running
       service:
@@ -113,6 +109,5 @@
         enabled: yes
         daemon_reload: yes
         state: started
-      when: ansible_check_mode == false
 
 # Instalar el cliente de mysql
