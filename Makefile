@@ -7,7 +7,7 @@ NUM = $(shell ls -A roles/ | wc -l)
 
 .PHONY: help
 help:
-	@echo -e "\n\e[36mIf you want run the role in Debug Mode, you just use the command: \e[97mmake 02_ansible-run EXTRA=-vvv\e[0m\n"
+	@echo -e "\n\e[36mIf you want run the role in Debug Mode, you just use the command: \e[97mmake ansible-run EXTRA=\"-l local --skip-tags remote_manager -vvv\"\e[0m\n"
 	@grep -oE '^[a-zA-Z0-9_-]+:.*?## .*$$|\*\+[%0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 	| awk 'BEGIN {FS = ":.*?## "}{printf "\033[36m%-30s\033[39m %s\n", $$1, $$2}' \
 	| sort -u
