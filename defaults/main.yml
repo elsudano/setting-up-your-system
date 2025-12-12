@@ -4,11 +4,6 @@
 # @required
 ntp_timezone: Europe/Madrid
 
-# We can change the name of our Workstation
-# By Default: workstation
-# @required
-name_of_workstation: server
-
 # Value of GpG Key in order to sing your commits
 # You can see which are you IDs with this command:
 # gpg --list-secret-keys --keyid-format LONG <your_email>
@@ -34,3 +29,9 @@ default_editor: nano
 # By Default is Ansible Managed
 # @optional
 ansible_managed: 'This file is managed by Ansible, all manual changes will be lost. The file was modified by Ansible on {{ ansible_facts["date_time"].iso8601 }} by {{ ansible_facts["user_id"] }} on {{ ansible_facts["hostname"] }}'
+
+# This will be the RSA key that we will load in the startup
+# By Default is ~/.ssh/id_rsa
+# @optional
+list_with_keys_to_load:
+  - ~/.ssh/id_rsa

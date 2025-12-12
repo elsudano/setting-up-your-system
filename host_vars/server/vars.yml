@@ -1,0 +1,85 @@
+---
+# We can change the name of our Workstation
+# By Default: workstation
+# @required
+name_of_workstation: server
+
+# We will run the roles in all these distributions
+# @required
+distributions:
+  - Debian
+  - RedHat
+  - Almalinux
+
+# In order to configure our NTP protocol we can choose which Time Zone we want
+# By Default: Europe/Madrid
+ntp_timezone: Europe/Madrid
+
+# This variable configure the value of the locale value in the system
+# also is needed for the check if in the system.
+# @required
+config_system_locale: es_ES.UTF-8
+
+# This variable configure the value of the language value in the system
+# also is needed for the check if in the system.
+# @required
+config_system_language: es_ES
+
+# Default user thah we will created in the system
+# @required
+default_user: usuario
+
+# Default group thah we will created in the system
+# @required
+default_group: usuario
+
+# You can choose which is the value for your Swapiness
+# By Default is false
+workstation_swapiness: false
+
+# We will need the content of our Public Key in order to use our SCM (Source Code Management)
+# @required
+workstation_public_key: |
+  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCwOHvXgGR4VUPWCJCufTVrL9o1+V5d/5P0Gp1yxjtVe3gJla9uKKySkY80biW0M2WOCx9dVti2HRfsRcs0OUU2RVOYFOevCA9gB9+u0WYm9LsCff3H5AE0tYkHNcTxJ68k4zA42XTAIDqfcn3L7qgNNilBNYY8bDYpZfqDYIIAidHTa/7YV92s1/8MwhhLuQYlxeWv95Up5zn6dpcUsWvLwYTYH/PCnNWdN/1pzFxtWQvupxwlG3Ny8IyKq9gQbFEDKMyJnp5+qM/R3e8quh1CT77sta0oNE4D3w9nI85d7bDLgT/ExNhbKkADBdh2G0x+LMb8Nwrxtp/zlscWGj6uW3S6TXiQb5Q39ghAypMakSDUf/S3eJzXh0ofKCXVm0CRrdS+gE8x8Qa85rUAl6wBwyngJvd7wKn9/7WYHQchq+vrP9tkFVDGBmgBQcWQTorqeqC3+QRWuPvC5nrY6DY491sn4ddRmMDqWwK29Ni38PPSnazu1WyKJ/zLQ3w4MKL6MuhBQJZmuS8oNbHOoD54ET42SGa2Jcm4lTE8ZzDAx4XPAz8CluyPLCNhoEvua+Mv8QpWWKCcGsM5keLZa7/OjKPmguLC3ddgnrhlBotZXlY4ykeyXNLDZPbDyTeq+JwSjJNKLdU1KD12bGRvHniOWy6gr2T7DcIgmsLJ4qSCAw== the.live.traveling@gmail.com
+
+# This is the file where we store the password for the user of X11VNC
+# @required
+x11vnc_passwd_file: /home/{{ default_user }}/.vnc/passwd
+
+# If we want that our user can connect with the daemon of docker, we have to set here
+# @required
+docker_users:
+  - usuario
+
+# In order to modify with the correct content the file 
+# /etc/resolv.conf, we have fill this variable with
+# all the options that we want in our file.
+# @required
+resolve_conf_file_options:
+ - nameserver 127.0.0.1
+ - options edns0 trust-ad
+
+# If we want to open a ports in our instance, we need put here 
+# which ports we need
+# @optional
+fw_ports:
+  - 22/tcp
+
+# If we want to open a service in our instance, we need put here 
+# which service we need
+# @optional
+fw_services:
+  - ssh
+
+# If we want to open a protocol in our instance, we need put here 
+# which protocols we need
+# @optional
+fw_protos:
+  - tcp
+
+# If we want change the protocol with the git in order to connect at our 
+# own git server we can use this configuration
+# @optional
+# git_protol:
+#  original: "git@gitlab.sudano.net:"
+#  replaceby: "https://gitlab.sudano.net/"
