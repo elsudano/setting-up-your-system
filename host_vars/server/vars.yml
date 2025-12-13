@@ -85,8 +85,23 @@ fw_protos:
 #  replaceby: "https://gitlab.sudano.net/"
 
 # We can manage which one of tools we want to install
-# @ required
+# @required
 install_microk8s: false
+
+# If you want to install Jekyll to create a static website
+# @required
+install_jekyll: true
+
+# All the packages that we need to run Jekyll locally required if install_jekyll is true
+# @required
+package_jekyll:
+  - state: present
+    packages:
+      - ruby-full
+      - build-essential
+      - zlib1g-dev
+      - jekyll
+      - bundler
 
 # We can use this variable in order to set all the repositories that we want
 # @required
