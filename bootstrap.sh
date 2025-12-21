@@ -18,7 +18,7 @@ if [ "$OS" = "Ubuntu" ]; then
     echo -e "PubkeyAuthentication yes\nX11Forwarding no" | sudo tee /etc/ssh/sshd_config.d/90_permit_ssh_key_authentication.conf > /dev/null
     sudo systemctl reload ssh && sudo systemctl enable ssh && sudo systemctl stop ssh && sudo systemctl start ssh
 fi
-if [ "$OS" = "RedHat" ] || [ "$OS" = "Centos" ] || [ "$OS" = "AlmaLinux" ]; then
+if [ "$OS" = "RedHat" ] || [ "$OS" = "Centos" ] || [ "$OS" = "AlmaLinux" ] || [ "$OS" = "Fedora" ]; then
     sudo dnf update && sudo dnf -y install nano git make python3-virtualenv ansible
 fi
 if [ "$OS" = "Suse" ]; then

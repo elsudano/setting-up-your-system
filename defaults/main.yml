@@ -35,3 +35,4 @@ ansible_managed: 'This file is managed by Ansible, all manual changes will be lo
 # @optional
 list_with_keys_to_load:
   - ~/.ssh/id_rsa
+  - ~/.ssh/id_rsa_the_live_traveling

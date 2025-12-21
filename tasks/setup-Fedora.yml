@@ -1,0 +1,40 @@
+---
+# All tasks for RedHad family SO
+- name: Upgrade all packages to the latest version (Fedora)
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+  become: true
+  become_method: sudo
+
+- name: All related to install packages
+  become: true
+  tags: packages
+  block:
+    - name: Set all the repositories that we need to install all the tools that we use.
+      ansible.builtin.yum_repository:
+        name: "{{ item.name }}"
+        file: "{{ item.filename }}"
+        description: "{{ item.description }}"
+        state: "{{ item.state }}"
+        baseurl: "{{ item.repo }}"
+      with_items:
+        "{{ repo_list }}"
+      when: ("WSL" not in ansible_kernel) or (item.repo_key | default('', true) | trim != '')
+
+    - name: Install and Remove the Custom Packages that we want
+      ansible.builtin.dnf:
+        name: "{{ item.packages }}"
+        state: "{{ item.state }}"
+        allowerasing: yes
+        update_cache: yes
+      with_items:
+        "{{ package_list }}"
+
+- name: Changing the size max of files that were can handle for Visual Studio Code
+  lineinfile:
+    path: /etc/sysctl.conf
+    regexp: 'fs.inotify.max_user_watches='
+    line: fs.inotify.max_user_watches=524288
+    create: yes
+  become: yes

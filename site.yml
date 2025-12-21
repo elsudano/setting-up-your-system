@@ -65,6 +65,11 @@
       include_tasks: tasks/setup-Manjaro.yml
       when: ansible_facts["distribution"] == 'Manjaro'
 
+    - name: Include all the Fedora tasks
+      tags: always
+      include_tasks: tasks/setup-Fedora.yml
+      when: ansible_facts["distribution"] == 'Fedora'
+
     - name: Include all the Post instalation tasks
       tags: always
       include_tasks: tasks/setup-Post.yml

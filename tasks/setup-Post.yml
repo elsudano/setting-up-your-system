@@ -1,1 +1,32 @@
 ---
+- local_action: stat path=/usr/bin/x11vnc
+  register: x11vnc_bin
+
+- name: Setting all the things to connect remotelly by X11Vnc
+  tags: remote_manager
+  when: x11vnc_bin.stat.exists and ('WSL' not in ansible_kernel)
+  block:
+    - name: We have created the file with the service of X11Vnc
+      template:
+        src: "x11vnc.service.j2"
+        dest: "/lib/systemd/system/x11vnc.service"
+        owner: "root"
+        group: "root"
+        mode: 0644
+
+    - name: We going to create a VNC folder to save the files
+      file:
+        path: "{{ lookup('env','HOME') }}/.vnc/"
+        state: directory
+        mode: 0755
+
+    - name: Setting the password for X11Vnc
+      command: x11vnc -storepasswd "{{ workstation_password }}" {{ x11vnc_passwd_file }}
+
+    - name: Ensure that X11Vnc service is enabled and running
+      service:
+        name: x11vnc
+        enabled: yes
+        daemon_reload: yes
+        state: started
+      when: ansible_check_mode == false
