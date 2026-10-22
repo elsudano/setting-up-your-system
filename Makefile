@@ -23,8 +23,12 @@ ansible-check: $(VIRTUALENV) .requirements ## Perform an Ansible check
 ansible-run: $(VIRTUALENV) .requirements ## Perform an Ansible execution
 	$(call virtualenv, $(VIRTUALENV), ansible-playbook -i $(INVENTORY) site.yml --diff $(EXTRA))
 
-ansible-inventory: $(VIRTUALENV) .requirements ## You can see all the host that you have in your inventory
+ansible-inventory: $(VIRTUALENV) .requirements ## You can see all the hosts that you have in your inventory or just one using HOST=server
+ifeq ($(HOST),)	
 	$(call virtualenv, $(VIRTUALENV), ansible-inventory --inventory $(INVENTORY) --list $(EXTRA))
+else
+	$(call virtualenv, $(VIRTUALENV), ansible-inventory --inventory $(INVENTORY) --host $(HOST) $(EXTRA))
+endif
 
 molecule-check: $(VIRTUALENV) ## You can check if the role is ok
 	$(call virtualenv, $(VIRTUALENV), molecule check)
