@@ -10,25 +10,11 @@
       tags: always
       include_vars: defaults/main.yml
 
-    # - name: "Include Common file with the common variables"
-    #   tags: always
-    #   include_vars: "{{ item }}.yml"
-    #   with_items:
-    #     - Common
-    #     - vault/Common
-
-    # - name: 'Include vault/{{ ansible_facts["distribution"] }}.yml and {{ ansible_facts["distribution"] }}.yml variables in order to complete the tasks'
-    #   tags: always
-    #   include_vars: "{{ item }}.yml"
-    #   with_items:
-    #     - '{{ ansible_facts["distribution"] }}'
-    #     - 'vault/{{ ansible_facts["distribution"] }}'
-
-  roles:
-    - { role: willshersystems.sshd, become: true, when: 'ansible_facts["distribution"] in distributions' }
-    - { role: geerlingguy.ntp, become: true, when: 'ansible_facts["distribution"] in distributions' }
-    - { role: geerlingguy.pip, become: true, when: 'ansible_facts["distribution"] in distributions' }
-    - { role: geerlingguy.docker, become: true, tags: docker, when: 'ansible_facts["distribution"] in distributions' }
+#  roles:
+#    - { role: willshersystems.sshd, become: true, when: 'ansible_facts["distribution"] in distributions' }
+#    - { role: geerlingguy.ntp, become: true, when: 'ansible_facts["distribution"] in distributions' }
+#    - { role: geerlingguy.pip, become: true, when: 'ansible_facts["distribution"] in distributions' }
+#    - { role: geerlingguy.docker, become: true, tags: docker, when: 'ansible_facts["distribution"] in distributions' }
 
   tasks:
     - name: Include all the common tasks

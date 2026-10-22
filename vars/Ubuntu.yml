@@ -1,8 +1,4 @@
 ---
-# We can manage which one of tools we want to install
-# @ required
-install_microk8s: false
-
 # We can use this variable in order to set all the repositories that we want
 # @required
 repo_list:
