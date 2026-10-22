@@ -3,8 +3,7 @@
 # @required
 distributions:
   - Debian
-  - RedHat
-  - Almalinux
+  - Ubuntu
 
 # In order to configure our NTP protocol we can choose which Time Zone we want
 # By Default: Europe/Madrid
@@ -39,7 +38,7 @@ workstation_public_key: |
 
 # This is the file where we store the password for the user of X11VNC
 # @required
-x11vnc_passwd_file: /home/{{ default_user }}/.vnc/passwd
+x11vnc_passwd_file: #/home/{{ default_user }}/.vnc/passwd
 
 # If we want that our user can connect with the daemon of docker, we have to set here
 # @required
@@ -52,6 +51,7 @@ docker_users:
 # @required
 resolve_conf_file_options:
  - nameserver 127.0.0.1
+ - nameserver 192.168.1.100
  - options edns0 trust-ad
 
 # If we want to open a ports in our instance, we need put here 
@@ -59,14 +59,6 @@ resolve_conf_file_options:
 # @optional
 fw_ports:
   - 22/tcp
-  - 5432/tcp
-  - 5601/tcp
-  - 5900/tcp
-  - 9200/tcp
-  - 16443/tcp
-  - 24231/tcp
-  - 25000/tcp
-  - 19001/tcp
 
 # If we want to open a service in our instance, we need put here 
 # which service we need
@@ -86,3 +78,22 @@ fw_protos:
 # git_protol:
 #  original: "git@gitlab.sudano.net:"
 #  replaceby: "https://gitlab.sudano.net/"
+
+# We can manage which one of tools we want to install
+# @required
+install_microk8s: false
+
+# If you want to install Jekyll to create a static website
+# @required
+install_jekyll: false
+
+# All the packages that we need to run Jekyll locally required if install_jekyll is true
+# @required
+package_jekyll:
+#  - state: present
+#    packages:
+#      - ruby-full
+#      - build-essential
+#      - zlib1g-dev
+#      - jekyll
+#      - bundler

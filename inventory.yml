@@ -15,6 +15,11 @@ remote:
       ansible_host: serverusb.casa.local
       short_host: serverusb
       name_of_workstation: serverusb
+    satellite:
+      ansible_ssh_user: usuario
+      ansible_host: satellite.casa.local
+      short_host: satellite
+      name_of_workstation: satellite
 k8s:
   hosts:
     primary:
