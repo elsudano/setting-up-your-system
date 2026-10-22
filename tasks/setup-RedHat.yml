@@ -1,4 +1,11 @@
 ---
+- name: 'Include vault/{{ ansible_facts["distribution"] }}.yml and {{ ansible_facts["distribution"] }}.yml variables in order to complete the tasks'
+  tags: always
+  include_vars: "{{ item }}.yml"
+  with_items:
+    - '{{ ansible_facts["distribution"] }}'
+    - 'vault/{{ ansible_facts["distribution"] }}'
+
 # All tasks for RedHad family SO
 - name: Changing the size max of files that were can handle for Visual Studio Code
   lineinfile:
@@ -6,4 +13,4 @@
     regexp: 'fs.inotify.max_user_watches='
     line: fs.inotify.max_user_watches=524288
     create: yes
-  become: yes
+  become: true

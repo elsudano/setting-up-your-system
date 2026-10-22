@@ -1,4 +1,11 @@
 ---
+- name: 'Include vault/{{ ansible_facts["distribution"] }}.yml and {{ ansible_facts["distribution"] }}.yml variables in order to complete the tasks'
+  tags: always
+  include_vars: "{{ item }}.yml"
+  with_items:
+    - '{{ ansible_facts["distribution"] }}'
+    - 'vault/{{ ansible_facts["distribution"] }}'
+
 # All tasks for RedHad family SO
 - name: Upgrade all packages to the latest version (Fedora)
   ansible.builtin.dnf:
@@ -20,7 +27,7 @@
         baseurl: "{{ item.repo }}"
       with_items:
         "{{ repo_list }}"
-      when: ("WSL" not in ansible_kernel) or (item.repo_key | default('', true) | trim != '')
+      when: ("WSL" not in ansible_facts["kernel"]) or (item.repo_key | default('', true) | trim != '')
 
     - name: Install and Remove the Custom Packages that we want
       ansible.builtin.dnf:
@@ -37,4 +44,4 @@
     regexp: 'fs.inotify.max_user_watches='
     line: fs.inotify.max_user_watches=524288
     create: yes
-  become: yes
+  become: true

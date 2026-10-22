@@ -1,4 +1,11 @@
 ---
+- name: 'Include vault/{{ ansible_facts["distribution"] }}.yml and {{ ansible_facts["distribution"] }}.yml variables in order to complete the tasks'
+  tags: always
+  include_vars: "{{ item }}.yml"
+  with_items:
+    - '{{ ansible_facts["distribution"] }}'
+    - 'vault/{{ ansible_facts["distribution"] }}'
+
 - name: Install docker in Manjaro
   include_role:
     name: geerlingguy.docker

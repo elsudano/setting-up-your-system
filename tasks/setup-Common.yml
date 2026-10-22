@@ -1,5 +1,12 @@
 ---
-- name: Change the name of VM (Debian)
+- name: "Include Common file with the common variables"
+  tags: always
+  include_vars: "{{ item }}.yml"
+  with_items:
+    - Common
+    - vault/Common
+
+- name: Change the name of VM
   hostname:
     name: "{{ name_of_workstation }}"
   when: '"WSL" not in ansible_facts["kernel"]'
@@ -72,7 +79,7 @@
       dest: /etc/logrotate.d/btmp
 
 - name: Set swappines
-  sysctl:
+  ansible.posix.sysctl:
     name: vm.swappiness
     value: "{{ workstation_swapiness }}"
     state: present
@@ -89,7 +96,9 @@
         path: "/home/{{ default_user }}/.bashrc"
         state: present
         block: |
-          eval "$(ssh-agent -s)"
+          if [[ $- == *i* ]]; then
+            eval "$(ssh-agent -s)"
+          fi
 
     - name: Load all the KEYs when user init session
       lineinfile:
@@ -99,7 +108,7 @@
       with_items:
         "{{ list_with_keys_to_load }}"
 
-    - name: Adding basic configuration to .bashrc (Debian)
+    - name: Adding basic configuration to .bashrc
       blockinfile:
         path: "/home/{{ default_user }}/.bashrc"
         marker: "# {mark} BASIC CONF"
@@ -192,8 +201,8 @@
         group: "{{ default_group }}"
         mode: 0644
 
-    - name: Add public key to authorized_hosts file for connect remotely (Debian)
-      authorized_key:
+    - name: Add public key to authorized_hosts file for connect remotely
+      ansible.posix.authorized_key:
         user: "{{ workstation_username }}"
         state: present
         key: "{{ workstation_public_key }}"
@@ -336,39 +345,6 @@
       with_items:
         - { key: net.ipv6.conf.all.disable_ipv6, value: 1 }
         - { key: net.ipv6.conf.default.disable_ipv6, value: 1 }
-
-- name: Setting all the things to connect remotelly by X11Vnc
-  tags: remote_manager
-  when: '"WSL" not in ansible_facts["kernel"]'
-  block:
-    - local_action: stat path=/usr/bin/x11vnc
-      register: x11vnc_binary
-
-    - name: We have created the file with the service of X11Vnc
-      template:
-        src: "x11vnc.service.j2"
-        dest: "/lib/systemd/system/x11vnc.service"
-        owner: "root"
-        group: "root"
-        mode: 0644
-
-    - name: We going to create a VNC folder to save the files
-      file:
-        path: '{{ lookup("env","HOME") }}/.vnc/'
-        state: directory
-        mode: 0755
-
-    - name: Setting the password for X11Vnc
-      command: x11vnc -storepasswd "{{ workstation_password }}" {{ x11vnc_passwd_file }}
-      when: x11vnc_binary.stat.exists
-
-    - name: Ensure that X11Vnc service is enabled and running
-      service:
-        name: x11vnc
-        enabled: yes
-        daemon_reload: yes
-        state: started
-      when: ansible_check_mode == false and x11vnc_binary.stat.exists
 
 - name: Setting all the configurations for GO-LANG
   tags: bash_config

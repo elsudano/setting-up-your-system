@@ -1,5 +1,12 @@
 ---
-- name: Upgrade all packages to the latest version (Debian)
+- name: 'Include vault/{{ ansible_facts["distribution"] }}.yml and {{ ansible_facts["distribution"] }}.yml variables in order to complete the tasks'
+  tags: always
+  include_vars: "{{ item }}.yml"
+  with_items:
+    - '{{ ansible_facts["distribution"] }}'
+    - 'vault/{{ ansible_facts["distribution"] }}'
+
+- name: Upgrade all packages to the latest version
   tags: packages
   apt:
     upgrade: true
@@ -12,7 +19,7 @@
 - local_action: stat path=/etc/cloud/cloud.cfg
   register: config_file
 
-- name: Change configuration for to be able change name of VM (Debian)
+- name: Change configuration for to be able change name of VM
   lineinfile:
     path: /etc/cloud/cloud.cfg
     regexp: '^preserve_hostname:'
@@ -74,7 +81,7 @@
 
 - name: Setting all the things to Jekyll automatically
   tags: jekyll
-  when: '"WSL" not in ansible_facts["kernel"] and install_jekyll and ansible_check_mode == false'
+  when: '"WSL" not in ansible_facts["kernel"] and install_jekyll and package_jekyll and ansible_check_mode == false'
   block:
     - name: Installing all the necessary packages for Jekyll
       apt:
