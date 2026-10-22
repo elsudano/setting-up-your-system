@@ -8,25 +8,27 @@ repo_list:
     filename: 'vscode'
     description: 'Visual Studio Code'
     repo_key: 'https://packages.microsoft.com/keys/microsoft.asc'
+  - state: present
+    repo: 'https://rpm.releases.hashicorp.com/fedora/hashicorp.repo'
+    name: 'hashicorp'
+    filename: 'hashicorp'
+    description: 'Hashicorp Terraform Repo'
+    repo_key: 'https://rpm.releases.hashicorp.com/gpg'
 
 # With this variable we can install or remove all the applications that we have or we want in our Workstation
 # @required
 package_list:
   - state: present
     packages:
-      - atop
       - ca-certificates
       - curl
       - net-tools
       - git
-      - golang-go
       - gnupg2
       - jq
       - tree
       - dnsmasq
       - nano
-      - make
-      - terraform
       - python3-firewall
       - python3-passlib
       - python3-debian
