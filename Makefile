@@ -34,11 +34,11 @@ decrypt: ## Decrypt files for working with them
 	$(call virtualenv, $(VIRTUALENV), ansible-vault decrypt vault/*.yml > /dev/null)
 	$(call virtualenv, $(VIRTUALENV), ansible-vault decrypt $(ANSIBLE_VAULT_FILES) > /dev/null)
 
-.PHONY: 06_upload
-upload: 04_encrypt .upload 05_decrypt ## Encrypt vault files and add, commit the files with message, for e.g. upload MESSAGE="Add files"
+.PHONY: upload
+upload: encrypt .upload decrypt ## Encrypt vault files and add, commit the files with message, for e.g. upload MESSAGE="Add files"
 
-.PHONY: 07_download
-download: .download 05_decrypt ## Downloading the files and decrypt vault files for editing ¡¡WARNING!! this operation push in stash your changes
+.PHONY: download
+download: .download decrypt ## Downloading the files and decrypt vault files for editing ¡¡WARNING!! this operation push in stash your changes
 
 .ONESHELL:
 documentation: $(VIRTUALENV) ## Make the documentation of the role, you can change the role and run this target to create a new README.md

@@ -131,6 +131,7 @@ package_list:
       - tree
       - dnsmasq
       - nano
+      - micro
       - make
       - python3-venv
       - python3-firewall
