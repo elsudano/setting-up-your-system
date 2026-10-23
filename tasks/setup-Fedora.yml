@@ -21,10 +21,13 @@
     - name: Set all the repositories that we need to install all the tools that we use.
       ansible.builtin.yum_repository:
         name: "{{ item.name }}"
-        file: "{{ item.filename }}"
         description: "{{ item.description }}"
-        state: "{{ item.state }}"
         baseurl: "{{ item.repo }}"
+        file: "{{ item.filename }}"
+        state: "{{ item.state }}"
+        gpgcheck: "{{ item.gpgcheck | default(true) }}"
+        gpgkey: "{{ item.repo_key | default(omit) }}"
+        enabled: "{{ item.enabled | default(true) }}"
       with_items:
         "{{ repo_list }}"
       when: ("WSL" not in ansible_facts["kernel"]) or (item.repo_key | default('', true) | trim != '')
