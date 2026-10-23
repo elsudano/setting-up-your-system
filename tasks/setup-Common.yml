@@ -1,11 +1,4 @@
 ---
-- name: "Include Common file with the common variables"
-  tags: always
-  include_vars: "{{ item }}.yml"
-  with_items:
-    - Common
-    - vault/Common
-
 - name: Change the name of VM
   hostname:
     name: "{{ name_of_workstation }}"
@@ -28,7 +21,7 @@
   tags: git
   block:
   - name: Configure your full name for Git configuration
-    git_config:
+    community.general.git_config:
       scope: global
       name: user.name
       value: "{{ workstation_scm_name }}"
@@ -36,7 +29,7 @@
     become: false
 
   - name: Configure your email for Git configuration
-    git_config:
+    community.general.git_config:
       scope: global
       name: user.email
       value: "{{ workstation_scm_email }}"
@@ -44,7 +37,7 @@
     become: false
 
   - name: Configure your default editor for Git configuration
-    git_config:
+    community.general.git_config:
       scope: global
       name: core.editor
       value: "{{ default_editor }}"
@@ -52,7 +45,7 @@
     become: false
 
   - name: Configure git protocol by default instead of http
-    git_config:
+    community.general.git_config:
       name: url.{{ git_protol.original }}.insteadOf
       scope: global
       value: "{{ git_protol.replaceby }}"
@@ -232,24 +225,27 @@
       register: gpg_binary
 
     - name: Configure gpgsing for Git configuration
-      git_config:
+      community.general.git_config:
         scope: global
         name: commit.gpgsign
         value: true
+        state: present
       when: gpg_binary.stat.exists
 
     - name: Configure gpg program for Git configuration
-      git_config:
+      community.general.git_config:
         scope: global
         name: gpg.program
         value: gpg2
+        state: present
       when: gpg_binary.stat.exists
 
     - name: Configure your ID gpg Key for Git configuration
-      git_config:
+      community.general.git_config:
         scope: global
         name: user.signingkey
         value: "{{ workstation_id_gpg_key }}"
+        state: present
       when: gpg_binary.stat.exists
 
 - name: Setting all the things to connect from out of the instance
