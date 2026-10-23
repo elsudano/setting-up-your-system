@@ -30,6 +30,7 @@ package_list:
       - ansible-core
       - terraform
       - kgpg
+      - btop
       - ca-certificates
       - curl
       - net-tools
