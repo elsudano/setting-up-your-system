@@ -4,13 +4,6 @@
 # @required
 ntp_timezone: Europe/Madrid
 
-# Value of GpG Key in order to sing your commits
-# You can see which are you IDs with this command:
-# gpg --list-secret-keys --keyid-format LONG <your_email>
-# By Default is empty
-# @required
-workstation_id_gpg_key:
-
 # Default user thah we will created in the system
 # @required
 default_user: usuario
