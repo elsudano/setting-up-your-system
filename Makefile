@@ -4,7 +4,7 @@ PYTHON_VERSION = 3
 VIRTUALENV = virtualenv
 VAULT_ANSIBLE = vault
 NUM = $(shell ls -A roles/ | wc -l)
-ANSIBLE_VAULT_FILES != find . -type f -name vault -not -path '*/*.template/*'
+ANSIBLE_VAULT_FILES != find . -type f -name vault.yml -not -path '*/*.template/*'
 
 .PHONY: help
 help:
