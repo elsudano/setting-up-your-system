@@ -20,6 +20,9 @@ repo_list:
 package_list:
   - state: present
     packages:
+      - code
+      - ansible-core
+      - kgpg
       - ca-certificates
       - curl
       - net-tools
