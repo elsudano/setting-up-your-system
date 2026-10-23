@@ -9,10 +9,16 @@ repo_list:
     description: 'Visual Studio Code'
     repo_key: 'https://packages.microsoft.com/keys/microsoft.asc'
   - state: present
-    repo: 'https://rpm.releases.hashicorp.com/fedora/hashicorp.repo'
-    name: 'hashicorp'
+    repo: 'https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable'
+    name: 'hashicorp_stable'
     filename: 'hashicorp'
-    description: 'Hashicorp Terraform Repo'
+    description: 'Hashicorp Stable - Fedora $releasever - $basearch'
+    repo_key: 'https://rpm.releases.hashicorp.com/gpg'
+  - state: present
+    repo: 'https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/test'
+    name: 'hashicorp_test'
+    filename: 'hashicorp'
+    description: 'Hashicorp Tests - Fedora $releasever - $basearch'
     repo_key: 'https://rpm.releases.hashicorp.com/gpg'
 
 # With this variable we can install or remove all the applications that we have or we want in our Workstation
@@ -22,6 +28,7 @@ package_list:
     packages:
       - code
       - ansible-core
+      - terraform
       - kgpg
       - ca-certificates
       - curl
